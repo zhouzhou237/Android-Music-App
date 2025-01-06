@@ -10,8 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import com.example.app.feature.splash.SplashRoute
 import com.example.app.core.design.theme.MyAppTheme
+import com.example.app.ui.MyApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,9 +24,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT))
 
 
+
         setContent {
+            val navController = rememberNavController()
+
             MyAppTheme {
-                SplashRoute()
+                MyApp(
+                    navController = navController,
+                )
             }
         }
     }

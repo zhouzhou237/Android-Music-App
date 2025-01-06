@@ -2,6 +2,7 @@ package com.example.app.feature.splash
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,16 +15,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.app.R
 import com.example.app.core.design.theme.MyAppTheme
-import androidx.compose.ui.graphics.Color
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import com.example.app.util.SuperDateUtil
 
 @Composable
-fun SplashRoute() {
+fun SplashRoute(
+    toMain: ()-> Unit,
+) {
     SplashScreen(
         year = SuperDateUtil.currentYear(),
+        toMain = toMain,
     )
 }
 
@@ -32,6 +34,7 @@ fun SplashRoute() {
 @Composable
 fun SplashScreen(
     year:Int=2024,
+    toMain: ()-> Unit = {},
 ) {
     Box(modifier = Modifier
         .fillMaxSize()
@@ -45,6 +48,9 @@ fun SplashScreen(
             modifier = Modifier
                 .padding(top = 150.dp)
                 .align(Alignment.TopCenter)
+                .clickable{
+                    toMain()
+                }
         )
         //endregion
 
@@ -68,6 +74,8 @@ fun SplashScreen(
 @Composable
 fun SplashRoutePreview(): Unit {
     MyAppTheme {
-        SplashRoute()
+        SplashScreen(
+            year = 2025,
+        )
     }
 }
