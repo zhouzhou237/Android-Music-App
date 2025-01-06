@@ -17,16 +17,33 @@ import com.example.app.R
 import com.example.app.core.design.theme.MyAppTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+
+
 import com.example.app.util.SuperDateUtil
 
 @Composable
 fun SplashRoute(
     toMain: ()-> Unit,
+    viewModel: SplashViewModel = viewModel()
 ) {
+    val timeLeft = viewModel.timeLeft.collectAsStateWithLifecycle()
+    val navigateToMain = viewModel.navigateToMain.collectAsState()
     SplashScreen(
         year = SuperDateUtil.currentYear(),
+        timeLeft = timeLeft.value,
         toMain = toMain,
     )
+
+    if (navigateToMain.value) {
+        LaunchedEffect(key1 = true) {
+            toMain()
+        }
+    }
+
 }
 
 
@@ -34,6 +51,7 @@ fun SplashRoute(
 @Composable
 fun SplashScreen(
     year:Int=2024,
+    timeLeft: Long = 0,
     toMain: ()-> Unit = {},
 ) {
     Box(modifier = Modifier
@@ -65,8 +83,14 @@ fun SplashScreen(
         )
         //endregion
 
-    }
+        Text(
+            text = "倒计时： $timeLeft",
+            color = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier.align(Alignment.TopEnd)
+                .padding(top = 100.dp, end = 100.dp)
+        )
 
+    }
 
 }
 
