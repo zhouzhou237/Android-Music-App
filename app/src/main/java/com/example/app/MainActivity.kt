@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
 
 
         //全部更改状态栏文字颜色为白色，背景为透明
-        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT))
+        //enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT))
 
 
 

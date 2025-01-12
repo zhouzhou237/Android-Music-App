@@ -21,7 +21,7 @@
     <string name="skip_ad_count">跳过%1$ds</string>
     <string name="not_found_activity">找不到对应的应用</string>
 
-    <string name="search_tip">搜索 爱学啊</string>
+    <string name="search_tip">输入你想搜索的内容</string>
 
     <string name="product_item_info">%1$s条评论 %2$s%%好评</string>
 

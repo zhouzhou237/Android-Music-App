@@ -84,7 +84,7 @@ fun SplashScreen(
         //endregion
 
         Text(
-            text = "倒计时： $timeLeft",
+            text = "Countdown： $timeLeft",
             color = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.align(Alignment.TopEnd)
                 .padding(top = 100.dp, end = 100.dp)

@@ -15,7 +15,7 @@
     <string name="ad_click_tip">Tap to details for more</string>
     <string name="skip_ad_count">Skip in %1$ds</string>
     <string name="not_found_activity">Application not found</string>
-    <string name="search_tip">Search 爱学啊</string>
+    <string name="search_tip">Enter you want to search for</string>
     <string name="product_item_info">%1$s comments %2$s%% feedback</string>
     <string name="phone_or_email">Phone or Email</string>
     <string name="enter_phone_or_email">Please enter phone number or email</string>

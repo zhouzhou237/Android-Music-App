@@ -1,6 +1,7 @@
 package com.example.app.core.design.theme
 
 import android.os.Build
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -8,11 +9,13 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 
 
-//推荐颜色名称和界面元素对应关系
-//https://m3.material.io/foundations/customization
+// Recommended Colour Names and Interface Element Correspondence
+// https://m3.material.io/foundations/customization
 val LightColors = lightColorScheme(
     primary = md_theme_light_primary,
     onPrimary = md_theme_light_onPrimary,
@@ -92,12 +95,38 @@ fun MyAppTheme(
         darkTheme -> DarkColors
         else -> LightColors
     }
+//    val view = LocalView.current
+//    if (!view.isInEditMode) {
+//        SideEffect {
+//            val window = (view.context as Activity).window
+//            window.statusBarColor = colorScheme.primary.toArgb()
+//            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+//        }
+//    }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
+    // Split Line Color
+    val dividerColor = if (darkTheme) md_theme_dark_divider else md_theme_light_divider
+    val arrowColor = if (darkTheme) md_theme_dark_arrow else md_theme_light_arrow
 
+    CompositionLocalProvider(
+        LocalDividerColor provides dividerColor,
+        LocalArrowColor provides arrowColor,
+    ) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = Typography,
+            content = content,
+            shapes = myShapes
+        )
+    }
 }
+
+// Split Line Color
+val LocalDividerColor = staticCompositionLocalOf { md_theme_light_divider }
+
+// Arrow color
+val LocalArrowColor = staticCompositionLocalOf { md_theme_light_arrow }
+
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
+fun supportsDynamicTheming() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
