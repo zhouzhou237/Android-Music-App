@@ -1,13 +1,14 @@
 package com.example.app.core.model
 
 import com.example.app.util.Constant
+import kotlinx.serialization.Serializable
 
 
 /**
  * Songs
 
  */
-
+@Serializable
 data class Song(
     /**
      * Unique ID for Songs

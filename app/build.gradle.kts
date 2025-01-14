@@ -5,6 +5,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+
+    //kotlin序列化(serialisation)
+    kotlin("plugin.serialization") version "1.9.23"
 }
 
     android {
@@ -55,6 +58,10 @@ dependencies {
     implementation(libs.androidx.material3)
 
     implementation(libs.navigation.compose)
+
+    //kotlin序列化(serialisation)
+    //https://kotlinlang.org/docs/serialization.html
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

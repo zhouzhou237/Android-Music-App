@@ -1,10 +1,12 @@
 package com.example.app.core.model.response
 
+import kotlinx.serialization.Serializable
+
 
 /**
  * 分页模型
  */
-
+@Serializable
 data class NetworkPageMeta(
     /**
      * 有多少条

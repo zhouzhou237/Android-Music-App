@@ -1,10 +1,12 @@
 package com.example.app.core.model.response
 
+import kotlinx.serialization.Serializable
+
 
 /**
  * 解析网络响应
  */
-
+@Serializable
 data class NetworkResponse<T>(
     /**
      * 真实数据

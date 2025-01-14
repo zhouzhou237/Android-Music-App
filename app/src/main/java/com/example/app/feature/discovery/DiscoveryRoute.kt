@@ -31,6 +31,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +43,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.app.R
 import com.example.app.core.design.theme.LocalDividerColor
 import com.example.app.core.design.theme.MyAppTheme
@@ -53,12 +55,18 @@ import com.example.app.core.model.Song
 import com.example.app.core.ui.DiscoveryPreviewParameterData
 import com.example.app.core.ui.DiscoveryPreviewParameterData.SONGS
 import com.example.app.core.ui.DiscoveryPreviewParameterProvider
+import androidx.compose.runtime.getValue
 
 
 @Composable
-fun DiscoveryRoute(){
+fun DiscoveryRoute(
+    viewModel: DiscoveryViewModel = viewModel()
+){
+    val datum by viewModel.datum.collectAsState()
+
+
     DiscoveryScreen(
-        songs = SONGS
+        songs = datum
     )
 
 }
