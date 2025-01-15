@@ -63,6 +63,21 @@ dependencies {
     //https://kotlinlang.org/docs/serialization.html
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
 
+    //region 网络框架
+    //https://github.com/square/okhttp
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    //网络框架日志框架
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    //类型安全网络框架
+    //https://github.com/square/retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
+    //让Retrofit支持Kotlinx Serialization
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+    //endregion
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

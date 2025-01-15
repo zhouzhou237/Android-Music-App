@@ -9,7 +9,7 @@ object Config {
     /**
      * 端点
      */
-    const val ENDPOINT = "xxxx"
+    const val ENDPOINT = "https://quick-server-sp.ixuea.com/"
 
 
     /**
