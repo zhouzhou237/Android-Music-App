@@ -31,7 +31,7 @@ class DiscoveryViewModel: ViewModel() {
 
 
         /**
-         *  test network reauest
+         *  test network request
          */
         viewModelScope.launch {
             val songs = MyRetrofitDatasource.songs()

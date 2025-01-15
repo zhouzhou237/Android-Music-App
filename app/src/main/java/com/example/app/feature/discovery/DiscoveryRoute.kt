@@ -56,6 +56,9 @@ import com.example.app.core.ui.DiscoveryPreviewParameterData
 import com.example.app.core.ui.DiscoveryPreviewParameterData.SONGS
 import com.example.app.core.ui.DiscoveryPreviewParameterProvider
 import androidx.compose.runtime.getValue
+import coil.compose.AsyncImage
+import com.example.app.feature.song.component.ItemSong
+import com.example.app.util.ResourceUtil
 
 
 @Composable
@@ -110,40 +113,6 @@ fun DiscoveryScreen(
     }
 }
 
-
-@Composable
-fun ItemSong(data: Song,
-             modifier : Modifier) {
-    Row(
-        modifier = modifier.fillMaxWidth()
-    ){
-        Image(
-            painter = painterResource(id = R.drawable.placeholder),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(50.dp)
-                .clip(MaterialTheme.shapes.small)
-                .background(LocalDividerColor.current)
-
-        )
-        Column(modifier=Modifier.weight(1f)
-        ) {
-            Text(
-                text = data.title,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            SpaceSmallHeight()
-
-            Text(
-                text = "${data.artist} -${data.album}",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-        }
-    }
-}
 
 // Discovery Interface Title Bar
 @OptIn(ExperimentalMaterial3Api::class)
