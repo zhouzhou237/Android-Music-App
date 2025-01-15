@@ -29,10 +29,12 @@ fun NavController.navigateToMain(): Unit {
  */
 fun NavGraphBuilder.mainScreen(
     finishPage: () -> Unit,
+    toSheetDetail: (String) -> Unit,
 ) {
     composable(MAIN_ROUTE) {
         MainRoute(
-            finishPage = finishPage
+            finishPage = finishPage,
+            toSheetDetail = toSheetDetail,
         )
     }
 }

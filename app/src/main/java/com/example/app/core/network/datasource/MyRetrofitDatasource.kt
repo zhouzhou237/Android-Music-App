@@ -1,7 +1,9 @@
 package com.example.app.core.network.datasource
 
 import com.example.app.core.config.Config
+import com.example.app.core.model.Sheet
 import com.example.app.core.model.Song
+import com.example.app.core.model.ViewData
 import com.example.app.core.model.response.NetworkPageData
 import com.example.app.core.model.response.NetworkResponse
 import com.example.app.core.network.di.NetworkModule
@@ -31,4 +33,13 @@ object MyRetrofitDatasource{
     ): NetworkResponse<Song> {
         return service.songDetail(id)
     }
+
+    suspend fun indexes(app: Int): NetworkResponse<NetworkPageData<ViewData>>{
+        return service.indexes(app)
+    }
+
+    suspend fun sheetDetail(id: String): NetworkResponse<Sheet>{
+        return service.sheetDetail(id)
+    }
+
 }

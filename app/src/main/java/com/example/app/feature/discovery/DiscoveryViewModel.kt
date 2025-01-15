@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.app.core.model.Song
+import com.example.app.core.model.ViewData
 import com.example.app.core.network.datasource.MyRetrofitDatasource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,8 +14,8 @@ import kotlinx.coroutines.launch
  * 发现界面VM
  */
 class DiscoveryViewModel: ViewModel() {
-    private val _datum = MutableStateFlow<List<Song>>(emptyList())
-    val datum:StateFlow<List<Song>> = _datum
+    private val _topDatum = MutableStateFlow<List<ViewData>>(emptyList())
+    val topDatum:StateFlow<List<ViewData>> =_topDatum
 
     init {
         loadData()
@@ -31,14 +32,12 @@ class DiscoveryViewModel: ViewModel() {
 
 
         /**
-         *  test network reauest
+         *  test network request
          */
         viewModelScope.launch {
-            val songs = MyRetrofitDatasource.songs()
-            _datum.value = songs.data?.list?: emptyList()
+            val indexes = MyRetrofitDatasource.indexes(app = 30)
+            _topDatum.value = indexes.data?.list ?: emptyList()
         }
-
-
     }
 
     companion object {

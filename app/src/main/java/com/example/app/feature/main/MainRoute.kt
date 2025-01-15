@@ -27,15 +27,17 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainRoute(
     finishPage: () -> Unit,
+    toSheetDetail: (String) -> Unit,
 ) {
     MainScreen(
-        finishPage = finishPage
+        toSheetDetail = toSheetDetail,
     )
 }
 
 @Composable
 fun MainScreen(
-    finishPage: () -> Unit = {}
+    finishPage: () -> Unit = {},
+    toSheetDetail: (String) -> Unit = {},
 ) {
     //Name of the currently selected interface
     var currentDestination by rememberSaveable {
@@ -65,7 +67,9 @@ fun MainScreen(
                 .weight(1f)
         ) { page ->
             when (page) {
-                0 -> DiscoveryRoute()
+                0 -> DiscoveryRoute(
+                    toSheetDetail = toSheetDetail
+                )
                 1 -> ShortVideoRoute()
                 2 -> MeRoute()
                 3 -> FeedRoute()

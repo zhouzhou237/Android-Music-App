@@ -16,9 +16,9 @@ object Config {
      * 资源端点
      */
 
-    var RESOURCE_ENDPOINT = "xxx1"
+    var RESOURCE_ENDPOINT = "https://com-quick-project.oss-cn-beijing.aliyuncs.com/%s"
 
 
-    var RESOURCE_ENDPOINT2 = "xxx2"
+    var RESOURCE_ENDPOINT2 = "http://course-music-dev.ixuea.com/%s"
 
 }

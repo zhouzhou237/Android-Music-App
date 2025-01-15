@@ -56,7 +56,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-
+    implementation(libs.androidx.compose.material.iconsExtended)
     implementation(libs.navigation.compose)
 
     //kotlin序列化(serialisation)
@@ -77,6 +77,10 @@ dependencies {
     //让Retrofit支持Kotlinx Serialization
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
     //endregion
+
+    //图片加载框架
+    //https://github.com/coil-kt/coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

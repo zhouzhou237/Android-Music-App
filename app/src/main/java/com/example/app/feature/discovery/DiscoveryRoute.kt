@@ -56,17 +56,23 @@ import com.example.app.core.ui.DiscoveryPreviewParameterData
 import com.example.app.core.ui.DiscoveryPreviewParameterData.SONGS
 import com.example.app.core.ui.DiscoveryPreviewParameterProvider
 import androidx.compose.runtime.getValue
+import coil.compose.AsyncImage
+import com.example.app.core.model.ViewData
+import com.example.app.feature.sheet.ItemSheet
+import com.example.app.feature.song.component.ItemSong
+import com.example.app.util.ResourceUtil
 
 
 @Composable
 fun DiscoveryRoute(
+    toSheetDetail: (String) -> Unit = {},
     viewModel: DiscoveryViewModel = viewModel()
 ){
-    val datum by viewModel.datum.collectAsState()
-
+    val datum by viewModel.topDatum.collectAsState()
 
     DiscoveryScreen(
-        songs = datum
+        topDatum = datum,
+        toSheetDetail = toSheetDetail,
     )
 
 }
@@ -75,7 +81,8 @@ fun DiscoveryRoute(
 fun DiscoveryScreen(
     toggleDrawer: () -> Unit = {},
     toSearch: () -> Unit = {},
-    songs:List<Song> = listOf(),
+    topDatum:List<ViewData> = listOf(),
+    toSheetDetail: (String) -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -102,48 +109,24 @@ fun DiscoveryScreen(
                 verticalArrangement = Arrangement.spacedBy(SpaceExtraMedium),
                 modifier = Modifier.fillMaxSize(),
             ) {
-                items(songs) {song ->
-                    ItemSong(data = song, modifier = Modifier)
+                topDatum.forEach { viewData ->
+                    if(viewData.sheets != null){
+                        items(viewData.sheets){ sheet ->
+                            ItemSheet(data = sheet, modifier = Modifier.clickable {
+                                toSheetDetail(sheet.id)
+                            })
+                        }
+                    }else if(viewData.songs != null){
+                        items(viewData.songs){ song ->
+                            ItemSong(data = song)
+                        }
+                    }
                 }
             }
         }
     }
 }
 
-
-@Composable
-fun ItemSong(data: Song,
-             modifier : Modifier) {
-    Row(
-        modifier = modifier.fillMaxWidth()
-    ){
-        Image(
-            painter = painterResource(id = R.drawable.placeholder),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(50.dp)
-                .clip(MaterialTheme.shapes.small)
-                .background(LocalDividerColor.current)
-
-        )
-        Column(modifier=Modifier.weight(1f)
-        ) {
-            Text(
-                text = data.title,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            SpaceSmallHeight()
-
-            Text(
-                text = "${data.artist} -${data.album}",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-        }
-    }
-}
 
 // Discovery Interface Title Bar
 @OptIn(ExperimentalMaterial3Api::class)
@@ -204,7 +187,7 @@ fun DiscoverScreenPreview(
 ){
     MyAppTheme {
         DiscoveryScreen(
-            songs = song,
+//            songs = song,
         )
     }
 }
