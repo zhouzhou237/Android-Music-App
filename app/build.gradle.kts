@@ -7,6 +7,10 @@ plugins {
 
     //kotlin序列化(serialisation)
     kotlin("plugin.serialization") version "1.9.23"
+
+    //依赖注入
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
     android {
@@ -33,11 +37,11 @@ plugins {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "21"
     }
     buildFeatures {
         compose = true
@@ -86,6 +90,17 @@ dependencies {
 
     debugImplementation(libs.chucker)
     releaseImplementation(libs.chucker.no.op)
+
+    //region 依赖注入
+    //https://developer.android.google.cn/training/dependency-injection/hilt-android?hl=zh-cn
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+    kspAndroidTest(libs.hilt.android.compiler)
+    androidTestImplementation(libs.hilt.android.testing)
+    //endregion
+
+    compileOnly(libs.ksp.gradlePlugin)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
