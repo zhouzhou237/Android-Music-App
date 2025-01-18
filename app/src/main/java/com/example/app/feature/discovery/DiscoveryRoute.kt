@@ -56,6 +56,7 @@ import com.example.app.core.ui.DiscoveryPreviewParameterData
 import com.example.app.core.ui.DiscoveryPreviewParameterData.SONGS
 import com.example.app.core.ui.DiscoveryPreviewParameterProvider
 import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.app.core.model.ViewData
 import com.example.app.feature.sheet.ItemSheet
@@ -65,8 +66,8 @@ import com.example.app.util.ResourceUtil
 
 @Composable
 fun DiscoveryRoute(
-    toSheetDetail: (String) -> Unit = {},
-    viewModel: DiscoveryViewModel = viewModel()
+    toSheetDetail: (String) -> Unit,
+    viewModel: DiscoveryViewModel = hiltViewModel()
 ){
     val datum by viewModel.topDatum.collectAsState()
 

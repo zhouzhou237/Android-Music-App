@@ -3,17 +3,23 @@ package com.example.app.feature.discovery
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.app.core.data.repository.CommonRepository
 import com.example.app.core.model.Song
 import com.example.app.core.model.ViewData
 import com.example.app.core.network.datasource.MyRetrofitDatasource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * 发现界面VM
  */
-class DiscoveryViewModel: ViewModel() {
+@HiltViewModel
+class DiscoveryViewModel @Inject constructor(
+    private val commonRepository: CommonRepository
+): ViewModel() {
     private val _topDatum = MutableStateFlow<List<ViewData>>(emptyList())
     val topDatum:StateFlow<List<ViewData>> =_topDatum
 
@@ -35,8 +41,8 @@ class DiscoveryViewModel: ViewModel() {
          *  test network request
          */
         viewModelScope.launch {
-            val indexes = MyRetrofitDatasource.indexes(app = 30)
-            _topDatum.value = indexes.data?.list ?: emptyList()
+               val indexes = commonRepository.indexes(app = 30)
+               _topDatum.value = indexes.data?.list?: emptyList()
         }
     }
 
