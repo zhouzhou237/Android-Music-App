@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.app.core.data.repository.SheetRepository
 import com.example.app.core.model.SHEET_EMPTY
 import com.example.app.core.model.Sheet
-import com.example.app.core.network.datasource.MyRetrofitDatasource
+import com.example.app.core.result.asResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -22,8 +22,8 @@ class SheetDetailViewModel(
 ): ViewModel() {
     val sheetId: String = checkNotNull(savedStateHandle[SHEET_ID])
 
-    private val _data = MutableStateFlow<Sheet>(SHEET_EMPTY())
-    val data: StateFlow<Sheet> = _data
+    private val _data = MutableStateFlow<SheetDetailUiState>(SheetDetailUiState.Loading)
+    val data: StateFlow<SheetDetailUiState> = _data
     private val sheetRepository = SheetRepository()
 
     init{
@@ -33,10 +33,21 @@ class SheetDetailViewModel(
 
     private fun loadData() {
         viewModelScope.launch {
-            sheetRepository.sheetDetail(sheetId).collect { response ->
-                _data.value = response.data ?: SHEET_EMPTY()
-            }
+            sheetRepository.sheetDetail(sheetId)
+                .asResult()
+                .collectLatest { r ->
+                    if (r.isSuccess) {
+                        _data.value = SheetDetailUiState.Success(r.getOrThrow().data !!)
+                    }else {
+                        _data.value = SheetDetailUiState.Error(r.exceptionOrNull()!!.localizedMessage)
+                    }
+
+                }
         }
+    }
+
+    fun onRetryClick() {
+        loadData()
     }
 
     companion object{

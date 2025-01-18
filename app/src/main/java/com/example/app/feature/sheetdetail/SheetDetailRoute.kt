@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.app.R
 import com.example.app.core.design.component.MyCenterTopAppBar
+import com.example.app.core.design.component.MyErrorView
+import com.example.app.core.design.component.MyLoading
 import com.example.app.core.model.SHEET_EMPTY
 import com.example.app.core.model.Sheet
 import com.example.app.feature.song.component.ItemSongSheet
@@ -25,7 +27,8 @@ fun SheetDetailRoute(
     val data by viewModel.data.collectAsState()
     SheetDetailScreen(
         data = data,
-        finishPage = finishPage
+        finishPage = finishPage,
+        onRetryClick = viewModel::onRetryClick,
     )
 }
 
@@ -33,29 +36,61 @@ fun SheetDetailRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SheetDetailScreen(
-    data: Sheet = SHEET_EMPTY(),
-    finishPage: () -> Unit,
+    data: SheetDetailUiState = SheetDetailUiState.Loading,
+    finishPage: () -> Unit = {},
+    onRetryClick:()-> Unit = {},
+
+    ) {
+
+    when(val data = data) {
+        is SheetDetailUiState.Loading->{
+            MyLoading()
+        }
+
+        is SheetDetailUiState.Error -> {
+            MyErrorView(
+                message = data.message,
+                onRetryClick = onRetryClick,
+            )
+        }
+        is SheetDetailUiState.Success -> {
+            ContentView(
+                finishPage = finishPage,
+                data = data.data,
+            )
+        }
+    }
+
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ContentView(
+    finishPage:() -> Unit,
+    data: Sheet,
 
 ) {
     Scaffold(
         topBar = {
-              MyCenterTopAppBar(
-                  finishPage = finishPage,
-                  titleText = stringResource(id = R.string.sheet)
-              )
+            MyCenterTopAppBar(
+                finishPage = finishPage,
+                titleText = stringResource(id = R.string.sheet)
+            )
         },
         modifier = Modifier.fillMaxSize()
     ) {  paddingValues ->
-            LazyColumn (
-                 modifier = Modifier.fillMaxSize()
-                    .padding(paddingValues)
-            ){
-                data.songs?.let { songs ->
-                    itemsIndexed(songs){ index,data ->
-                        ItemSongSheet(data = data, index = index)
-                    }
+        LazyColumn (
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ){
+            data.songs?.let { songs ->
+                itemsIndexed(songs){ index,data ->
+                    ItemSongSheet(data = data, index = index)
                 }
             }
+        }
 
     }
 }

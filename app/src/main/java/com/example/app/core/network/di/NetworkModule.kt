@@ -3,6 +3,7 @@ package com.example.app.core.network.di
 import kotlinx.serialization.json.Json
 import okhttp3.Call
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
 object NetworkModule {
@@ -20,6 +21,9 @@ object NetworkModule {
             .connectTimeout(10, TimeUnit.SECONDS) //连接超时时间
             .writeTimeout(10, TimeUnit.SECONDS) //写超时时间
             .readTimeout(10, TimeUnit.SECONDS) //读超时时间
+
+
+
             .build()
     }
 
