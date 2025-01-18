@@ -49,7 +49,7 @@ fun SheetDetailScreen(
 
         is SheetDetailUiState.Error -> {
             MyErrorView(
-                message = data.message,
+                exception = data.exception,
                 onRetryClick = onRetryClick,
             )
         }

@@ -12,6 +12,8 @@ composeBom = "2024.12.01"
 navigationCompose = "2.8.5"
 androidxLifecycle = "2.8.7"
 
+chucker = "4.0.0"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -34,6 +36,12 @@ androidx-compose-material-iconsExtended = { group = "androidx.compose.material",
 #导航
 #https://mvnrepository.com/artifact/androidx.navigation/navigation-compose
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+
+#通过OkHttp的拦截器机制
+#实现在应用通知栏显示网络请求功能
+#https://github.com/ChuckerTeam/chucker
+chucker = { group = "com.github.chuckerteam.chucker", name = "library", version.ref = "chucker" }
+chucker-no-op = { group = "com.github.chuckerteam.chucker", name = "library-no-op", version.ref = "chucker" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

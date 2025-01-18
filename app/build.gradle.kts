@@ -1,5 +1,4 @@
-import org.gradle.kotlin.dsl.android
-import org.gradle.kotlin.dsl.libs
+
 
 plugins {
     alias(libs.plugins.android.application)
@@ -42,6 +41,9 @@ plugins {
     }
     buildFeatures {
         compose = true
+
+        //开启buildConfig
+        buildConfig = true
     }
 }
 
@@ -81,6 +83,9 @@ dependencies {
     //图片加载框架
     //https://github.com/coil-kt/coil
     implementation("io.coil-kt:coil-compose:2.6.0")
+
+    debugImplementation(libs.chucker)
+    releaseImplementation(libs.chucker.no.op)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -20,6 +20,6 @@ sealed interface SheetDetailUiState {
     data object Loading : SheetDetailUiState
 
     data class Error(
-        val message: String,
+        val exception: CommonException,
     ) : SheetDetailUiState
 }

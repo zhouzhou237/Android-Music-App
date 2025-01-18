@@ -1,10 +1,17 @@
 package com.example.app.core.config
 
+import com.example.app.BuildConfig
+
 
 /**
  * 配置文件
  */
 object Config {
+
+    /**
+     * 是否是调试模式
+     */
+    val DEBUG: Boolean = BuildConfig.DEBUG
 
     /**
      * 端点
