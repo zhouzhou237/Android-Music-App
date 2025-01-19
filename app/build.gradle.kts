@@ -8,7 +8,7 @@ plugins {
     //kotlin序列化(serialisation)
     kotlin("plugin.serialization") version "1.9.23"
 
-    //依赖注入
+    //依赖注入(dependency injection)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
 }

@@ -16,7 +16,7 @@ object Config {
     /**
      * 端点
      */
-    const val ENDPOINT = "https://quick-server-sp.ixuea.com/"
+    const val ENDPOINT = "https://cloud-music-isep-1b9bd091d8ad.herokuapp.com/"
 
 
     /**
