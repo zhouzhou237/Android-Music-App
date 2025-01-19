@@ -102,6 +102,17 @@ dependencies {
 
     compileOnly(libs.ksp.gradlePlugin)
 
+    val androidx_media3_version = "1.2.1"
+    implementation("androidx.media3:media3-exoplayer:$androidx_media3_version")
+    implementation("androidx.media3:media3-datasource:$androidx_media3_version")
+    implementation("androidx.media3:media3-ui:$androidx_media3_version")
+    implementation("androidx.media3:media3-session:$androidx_media3_version")
+    implementation("androidx.media3:media3-cast:$androidx_media3_version")
+
+    //browser?.getChildren()?.await()
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.7.1")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

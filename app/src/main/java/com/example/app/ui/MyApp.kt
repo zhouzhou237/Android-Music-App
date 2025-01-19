@@ -10,6 +10,8 @@ import com.example.app.feature.sheetdetail.navigateToSheetDetail
 import com.example.app.feature.sheetdetail.sheetDetailScreen
 import com.example.app.feature.splash.SPLASH_ROUTE
 import com.example.app.feature.splash.splashScreen
+import com.quick.app.feature.mediaplayer.musicPlayerScreen
+import com.quick.app.feature.mediaplayer.navigateToMusicPlayer
 
 
 @Composable
@@ -24,6 +26,10 @@ fun MyApp(navController : NavHostController) {
             toSheetDetail = navController::navigateToSheetDetail
         )
         sheetDetailScreen(
+            finishPage = navController::popBackStack,
+            toMusicPlayer = navController::navigateToMusicPlayer
+        )
+        musicPlayerScreen(
             finishPage = navController::popBackStack,
         )
     }

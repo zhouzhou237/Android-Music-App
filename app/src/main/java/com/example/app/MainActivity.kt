@@ -14,7 +14,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.app.feature.splash.SplashRoute
 import com.example.app.core.design.theme.MyAppTheme
 import com.example.app.ui.MyApp
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -15,6 +15,7 @@ fun NavController.navigateToSheetDetail(sheetId: String): Unit {
 
 fun NavGraphBuilder.sheetDetailScreen(
     finishPage: () -> Unit,
+    toMusicPlayer: () -> Unit,
 ) {
     composable(
         "${SHEET_DETAIL_ROUTE}/{${SHEET_ID}}",
@@ -24,6 +25,7 @@ fun NavGraphBuilder.sheetDetailScreen(
     ){
         SheetDetailRoute(
             finishPage = finishPage,
+            toMusicPlayer = toMusicPlayer,
        )
     }
 }
