@@ -30,11 +30,27 @@ fun NavController.navigateToMain(): Unit {
 fun NavGraphBuilder.mainScreen(
     finishPage: () -> Unit,
     toSheetDetail: (String) -> Unit,
+    toFriend: (Int) -> Unit,
+    toMessage: () -> Unit,
+    toScan: () -> Unit,
+    toProfile: () -> Unit,
+    toCode: () -> Unit,
+    toLogin: () -> Unit,
+    toSetting: () -> Unit,
+    toAbout: () -> Unit,
 ) {
     composable(MAIN_ROUTE) {
         MainRoute(
             finishPage = finishPage,
             toSheetDetail = toSheetDetail,
+            toFriend = toFriend,
+            toMessage = toMessage,
+            toCode = toCode,
+            toProfile = toProfile,
+            toLogin = toLogin,
+            toScan = toScan,
+            toSetting = toSetting,
+            toAbout = toAbout,
         )
     }
 }

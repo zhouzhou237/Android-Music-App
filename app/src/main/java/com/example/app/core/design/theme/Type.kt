@@ -32,3 +32,12 @@ val Typography = Typography(
     )
     */
 )
+
+val Typography.bodyXLarge: TextStyle
+    get() {
+        return TextStyle(
+            fontFamily = FontFamily.Default,
+            fontWeight = FontWeight.Normal,
+            fontSize = 17.sp,
+        )
+    }

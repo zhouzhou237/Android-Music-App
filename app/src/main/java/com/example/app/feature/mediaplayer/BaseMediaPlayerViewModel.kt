@@ -11,6 +11,8 @@ import com.example.app.core.media.MediaServiceConnection
 import com.example.app.core.model.Song
 import com.example.app.core.model.from
 import com.example.app.util.ResourceUtil
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 open class BaseMediaPlayerViewModel(
@@ -19,6 +21,19 @@ open class BaseMediaPlayerViewModel(
     ) : ViewModel() {
 
     val toMusicPlayer = mutableStateOf<Boolean>(false)
+    val nowPlaying = mediaServiceConnection.nowPlaying
+    val playbackState = mediaServiceConnection.playbackState
+    val currentPosition = mediaServiceConnection.currentPosition.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = 0,
+    )
+
+//    val playRepeatMode = userDataRepository.userData.map { it.playRepeatMode }.stateIn(
+//        scope = viewModelScope,
+//        started = SharingStarted.WhileSubscribed(5_000),
+//        initialValue = PlaybackMode.REPEAT_LIST,
+//    )
 
     public fun setMediasAndPlay(
         datum: List<Song>,
@@ -57,5 +72,36 @@ open class BaseMediaPlayerViewModel(
 
     fun clearMusicPlayer(): Unit {
         toMusicPlayer.value = false
+    }
+
+    fun onSeek(data: Float) {
+        mediaServiceConnection.seekTo(data.toLong())
+    }
+
+    fun onPreviousClick() {
+        mediaServiceConnection.seekToPrevious()
+    }
+
+    fun onNextClick() {
+        mediaServiceConnection.seekToNext()
+    }
+
+    fun onPlayOrPauseClick() {
+        mediaServiceConnection.playOrPause()
+    }
+
+    fun onChangeRepeatModeClick() {
+        viewModelScope.launch {
+//            var playRepeatMode = userDataRepository.userData.first().playRepeatMode.ordinal
+//            playRepeatMode++
+//            if (playRepeatMode > PlaybackMode.REPEAT_SHUFFLE.ordinal) {
+//                playRepeatMode = PlaybackMode.REPEAT_LIST.ordinal
+//            }
+//            userDataRepository.setRepeatModel(
+//                PlaybackModePreferences.forNumber(playRepeatMode)
+//            )
+
+//            mediaServiceConnection.setRepeatMode(playRepeatMode)
+        }
     }
 }

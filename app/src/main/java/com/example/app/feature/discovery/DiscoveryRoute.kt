@@ -67,12 +67,15 @@ import com.example.app.util.ResourceUtil
 @Composable
 fun DiscoveryRoute(
     toSheetDetail: (String) -> Unit,
+    toggleDrawer: () -> Unit,
+    //    viewModel: DiscoveryViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
     viewModel: DiscoveryViewModel = hiltViewModel()
 ){
     val datum by viewModel.topDatum.collectAsState()
 
     DiscoveryScreen(
         topDatum = datum,
+        toggleDrawer = toggleDrawer,
         toSheetDetail = toSheetDetail,
     )
 
@@ -132,10 +135,10 @@ fun DiscoveryScreen(
 // Discovery Interface Title Bar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DiscoveryTopBar(toggleDrawer: () -> Unit, toSearch: () -> Unit) {
+private fun DiscoveryTopBar(toggleDrawer: () -> Unit, toSearch: () -> Unit) {
     CenterAlignedTopAppBar(
         navigationIcon = {
-            IconButton(onClick = {toggleDrawer}) {
+            IconButton(onClick = toggleDrawer) {
                 Icon(imageVector = Icons.Default.Menu,
                     contentDescription = null,
                     modifier = Modifier.size(28.dp)

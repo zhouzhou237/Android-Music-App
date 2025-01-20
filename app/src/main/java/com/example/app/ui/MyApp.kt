@@ -23,7 +23,15 @@ fun MyApp(navController : NavHostController) {
         )
         mainScreen(
             finishPage = navController::popBackStack,
-            toSheetDetail = navController::navigateToSheetDetail
+            toSheetDetail = navController::navigateToSheetDetail,
+            toFriend = {},
+            toMessage = {},
+            toScan = {},
+            toProfile = {},
+            toLogin = {},
+            toCode = {},
+            toSetting = {},
+            toAbout = {},
         )
         sheetDetailScreen(
             finishPage = navController::popBackStack,

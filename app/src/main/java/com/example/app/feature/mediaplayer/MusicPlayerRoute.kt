@@ -28,6 +28,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,7 +37,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.media3.common.MediaItem
 import com.example.app.R
 import com.example.app.core.design.theme.MyAppTheme
 import com.example.app.core.design.theme.SpaceLarge
@@ -44,14 +48,32 @@ import com.example.app.core.design.theme.SpaceOuter
 import com.example.app.core.design.theme.SpacerOuterHeight
 import com.example.app.core.extension.asFormatTimeString
 import com.example.app.core.extension.clickableNoRipple
+import com.example.app.core.media.EMPTY_PLAYBACK_STATE
+import com.example.app.core.media.PlaybackState
+import com.example.app.core.model.PlaybackMode
 
 @Composable
 fun MusicPlayerRoute(
     finishPage: () -> Unit,
-    viewModel: MusicPlayViewModel = viewModel()
+    viewModel: MusicPlayViewModel = hiltViewModel()
 ) {
+
+    val nowPlaying by viewModel.nowPlaying.collectAsStateWithLifecycle()
+    val playbackState by viewModel.playbackState.collectAsStateWithLifecycle()
+    val currentPosition by viewModel.currentPosition.collectAsStateWithLifecycle()
+//    val playRepeatMode by viewModel.playRepeatMode.collectAsStateWithLifecycle()
+
     MusicPlayerScreen(
         finishPage = finishPage,
+        nowPlaying = nowPlaying,
+        playbackState = playbackState,
+        currentPosition = currentPosition,
+        onSeek = viewModel::onSeek,
+//        playRepeatMode = playRepeatMode,
+        onPreviousClick = viewModel::onPreviousClick,
+        onPlayOrPauseClick = viewModel::onPlayOrPauseClick,
+        onNextClick = viewModel::onNextClick,
+        onChangeRepeatModeClick = viewModel::onChangeRepeatModeClick,
     )
 }
 
@@ -60,6 +82,15 @@ fun MusicPlayerRoute(
 @Composable
 fun MusicPlayerScreen(
     finishPage: () -> Unit = {},
+    nowPlaying: MediaItem = MediaItem.EMPTY,
+    playbackState: PlaybackState = EMPTY_PLAYBACK_STATE,
+    currentPosition: Long = 0,
+    onSeek: (Float) -> Unit = { },
+    playRepeatMode: PlaybackMode = PlaybackMode.REPEAT_LIST,
+    onChangeRepeatModeClick: () -> Unit = {},
+    onPreviousClick: () -> Unit = {},
+    onPlayOrPauseClick: () -> Unit = {},
+    onNextClick: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -77,14 +108,12 @@ fun MusicPlayerScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Text(
-//                            text = nowPlaying.mediaMetadata.title.toString(),
-                            text = "Song",
+                            text = nowPlaying.mediaMetadata.title.toString(),
                             style = MaterialTheme.typography.titleMedium,
                             color = Color.White,
                         )
                         Text(
-//                            text = nowPlaying.mediaMetadata.artist.toString(),
-                            text = "Singer",
+                            text = nowPlaying.mediaMetadata.artist.toString(),
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.White,
                         )
@@ -105,7 +134,8 @@ fun MusicPlayerScreen(
                 val (musicPlayerBackground, recordThumb, recordBackground) = createRefs()
                 BackgroundContent(
                     data = "",
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
                         .constrainAs(musicPlayerBackground) {
 
                             top.linkTo(parent.top)
@@ -141,30 +171,23 @@ fun MusicPlayerScreen(
 
                     //Progress information
                     ProgressInfo(
-//                        currentPosition = currentPosition,
-//                        duration = playbackState.durationFormat,
-//                        onSeek = onSeek,
-                        currentPosition = 0,
-                        duration = 0,
-                        onSeek = {},
+                        currentPosition = currentPosition,
+                        duration = playbackState.durationFormat,
+                        onSeek = onSeek,
+
                     )
 
                     SpacerOuterHeight()
 
                     //Playback Controls
                     PlayerMediaButtons(
-//                        isPlaying = playbackState.isPlaying,
-//                        playRepeatMode = playRepeatMode,
-//                        onChangeRepeatModeClick = onChangeRepeatModeClick,
-//                        onPreviousClick = onPreviousClick,
-//                        onPlayOrPauseClick = onPlayOrPauseClick,
-//                        onNextClick = onNextClick,
+                        isPlaying = playbackState.isPlaying,
+                        playRepeatMode = playRepeatMode,
+                        onChangeRepeatModeClick = onChangeRepeatModeClick,
+                        onPreviousClick = onPreviousClick,
+                        onPlayOrPauseClick = onPlayOrPauseClick,
+                        onNextClick = onNextClick,
 //                        onMusicListClick = onMusicListClick,
-                        isPlaying = false,
-                        onChangeRepeatModeClick = {},
-                        onPreviousClick = {},
-                        onPlayOrPauseClick = {},
-                        onNextClick = {},
                         onMusicListClick = {},
                     )
                 }
@@ -177,7 +200,7 @@ fun MusicPlayerScreen(
 @Composable
 fun PlayerMediaButtons(
     isPlaying: Boolean,
-//    playRepeatMode: PlaybackMode,
+    playRepeatMode: PlaybackMode,
     onChangeRepeatModeClick: () -> Unit,
     onPreviousClick: () -> Unit,
     onPlayOrPauseClick: () -> Unit,
@@ -191,13 +214,12 @@ fun PlayerMediaButtons(
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         MusicControlButton(
-//            when (playRepeatMode) {
-//                PlaybackMode.REPEAT_LIST -> R.drawable.music_repeat_list
-//                PlaybackMode.REPEAT_ONE -> R.drawable.music_repeat_single
-//                PlaybackMode.REPEAT_SHUFFLE, PlaybackMode.REPEAT_UNSPECIFIED -> R.drawable.music_repeat_random
-//            },
+            when (playRepeatMode) {
+                PlaybackMode.REPEAT_LIST -> R.drawable.music_repeat_list
+                PlaybackMode.REPEAT_ONE -> R.drawable.music_repeat_single
+                PlaybackMode.REPEAT_SHUFFLE, PlaybackMode.REPEAT_UNSPECIFIED -> R.drawable.music_repeat_random
+            },
 
-            R.drawable.music_repeat_list,
             modifier = Modifier
                 .weight(1f)
                 .clickableNoRipple {
