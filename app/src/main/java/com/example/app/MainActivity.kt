@@ -11,13 +11,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.example.app.core.data.repository.UserDataRepository
 import com.example.app.feature.splash.SplashRoute
 import com.example.app.core.design.theme.MyAppTheme
 import com.example.app.ui.MyApp
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var userDataRepository: UserDataRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -33,6 +39,7 @@ class MainActivity : ComponentActivity() {
             MyAppTheme {
                 MyApp(
                     navController = navController,
+                    userDataRepository = userDataRepository,
                 )
             }
         }

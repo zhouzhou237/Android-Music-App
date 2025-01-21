@@ -84,6 +84,11 @@ fun LoginRoute(
         resetUiState = viewModel:: resetUiState,
     )
 
+    LaunchedEffect(key1 = uiState) {
+        if (uiState == LoginUiState.Success) {
+            finishAllLoginPages()
+        }
+    }
 
 //    LaunchedEffect(key1 = uiState) {
 //        when (val uiState = uiState) {

@@ -34,6 +34,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -49,8 +50,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.app.R
+import com.example.app.core.datastore.UserPreferences
 import com.example.app.core.design.component.MyNavigationBar
 import com.example.app.core.design.theme.ArrowIcon
 import com.example.app.core.design.theme.SpaceExtraOuter
@@ -70,12 +73,14 @@ import com.example.app.feature.discovery.DiscoveryRoute
 import com.example.app.feature.feed.FeedRoute
 import com.example.app.feature.me.MeRoute
 import com.example.app.feature.shortvideo.ShortVideoRoute
+import com.example.app.ui.MyAppUiState
 import com.example.app.util.Constant
 import com.example.app.util.ResourceUtil
 import kotlinx.coroutines.launch
 
 @Composable
 fun MainRoute(
+    appUiState: MyAppUiState,
     finishPage: () -> Unit,
     toSheetDetail: (String) -> Unit,
     toFriend: (Int) -> Unit,
@@ -86,7 +91,12 @@ fun MainRoute(
     toLogin: () -> Unit,
     toSetting: () -> Unit = {},
     toAbout: () -> Unit = {},
+    viewModel: MainViewModel = hiltViewModel()
 ) {
+
+    val isLogin by appUiState.isLogin.collectAsState()
+    val userData by appUiState.userData.collectAsState()
+
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -107,10 +117,8 @@ fun MainRoute(
                     .fillMaxHeight()
             ) {
                 MyDrawerView(
-//                    userData = userData,
-//                    isLogin = isLogin,
-                    userData = UserData(),
-                    isLogin = false,
+                    userData = userData,
+                    isLogin = isLogin,
                     toFriend = toFriend,
                     toMessage = toMessage,
                     toCode = toCode,
@@ -119,9 +127,7 @@ fun MainRoute(
                     toScan = toScan,
                     toSetting = toSetting,
                     toAbout = toAbout,
-                    onLogoutClick = {
-
-                    },
+                    onLogoutClick = viewModel::onLogoutClick,
                 )
             }
         },
@@ -197,6 +203,7 @@ fun MyDrawerView(
             )
 
 
+            if (isLogin) {
                 OutlinedButton(
                     onClick = onLogoutClick,
                     modifier = Modifier
@@ -205,6 +212,7 @@ fun MyDrawerView(
                 ) {
                     Text(text = stringResource(id = R.string.logout))
                 }
+            }
 
         }
     }
@@ -434,11 +442,11 @@ fun MyUserInfoView(
     ) {
         if (userData.isLogin()) {
             //用户信息
-//            UserProfile(
-//                userData.user,
-//                toProfile = toProfile,
-//                toScan = toScan,
-//            )
+            UserProfile(
+                userData.user,
+                toProfile = toProfile,
+                toScan = toScan,
+            )
         } else {
             DefaultUserProfile(
                 toLogin = toLogin,
@@ -496,47 +504,48 @@ private fun DefaultUserProfile(
 
 @Composable
 private fun UserProfile(
+    data: UserPreferences,
     toProfile: () -> Unit,
     toScan: () -> Unit,
 ) {
-//    Row(
-//        verticalAlignment = Alignment.CenterVertically,
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .clickableNoRipple {
-//                toProfile()
-//            }
-//    ) {
-//
-//        AsyncImage(
-//            model = ResourceUtil.r(data.icon),
-//            contentDescription = null,
-//            contentScale = ContentScale.Crop,
-//            modifier = userIconModifier,
-//            )
-//
-//
-//        SpaceMediumWidth()
-//
-//        Text(
-//            text = data.nickname,
-//            style = MaterialTheme.typography.bodyXLarge,
-//            color = MaterialTheme.colorScheme.onSurface,
-//        )
-//
-//
-//        ArrowIcon()
-//
-//        Spacer(modifier = Modifier.weight(1f))
-//
-//        IconButton(onClick = toScan) {
-//            Icon(
-//                painter = painterResource(id = R.drawable.scan),
-//                contentDescription = null,
-//                modifier = Modifier.size(36.dp),
-//            )
-//        }
-//    }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickableNoRipple {
+                toProfile()
+            }
+    ) {
+
+        AsyncImage(
+            model = ResourceUtil.r(data.icon),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = userIconModifier,
+            )
+
+
+        SpaceMediumWidth()
+
+        Text(
+            text = data.nickname,
+            style = MaterialTheme.typography.bodyXLarge,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+
+
+        ArrowIcon()
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        IconButton(onClick = toScan) {
+            Icon(
+                painter = painterResource(id = R.drawable.scan),
+                contentDescription = null,
+                modifier = Modifier.size(36.dp),
+            )
+        }
+    }
 }
 
 

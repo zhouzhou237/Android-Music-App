@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.app.feature.splash.SPLASH_ROUTE
+import com.example.app.ui.MyAppUiState
 
 
 const val MAIN_ROUTE = "main"
@@ -28,6 +29,7 @@ fun NavController.navigateToMain(): Unit {
 配置导航
  */
 fun NavGraphBuilder.mainScreen(
+    appUiState: MyAppUiState,
     finishPage: () -> Unit,
     toSheetDetail: (String) -> Unit,
     toFriend: (Int) -> Unit,
@@ -41,6 +43,7 @@ fun NavGraphBuilder.mainScreen(
 ) {
     composable(MAIN_ROUTE) {
         MainRoute(
+            appUiState = appUiState,
             finishPage = finishPage,
             toSheetDetail = toSheetDetail,
             toFriend = toFriend,

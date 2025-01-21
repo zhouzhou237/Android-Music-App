@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
+import com.example.app.core.data.repository.UserDataRepository
 import com.example.app.feature.login.loginScreen
 import com.example.app.feature.login.navigateToLogin
 import com.example.app.feature.loginhome.finishAllLoginPages
@@ -20,13 +21,18 @@ import com.quick.app.feature.mediaplayer.navigateToMusicPlayer
 
 
 @Composable
-fun MyApp(navController : NavHostController) {
+fun MyApp(
+    navController : NavHostController,
+    userDataRepository: UserDataRepository,
+    appUiState: MyAppUiState = rememberMyAppUiState(userDataRepository = userDataRepository)
+) {
 
     NavHost(navController = navController, startDestination = SPLASH_ROUTE) {
         splashScreen(
             toMain = navController::navigateToMain
         )
         mainScreen(
+            appUiState = appUiState,
             finishPage = navController::popBackStack,
             toSheetDetail = navController::navigateToSheetDetail,
             toFriend = {},
