@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 
@@ -28,7 +29,7 @@ import com.example.app.util.SuperDateUtil
 @Composable
 fun SplashRoute(
     toMain: ()-> Unit,
-    viewModel: SplashViewModel = viewModel()
+    viewModel: SplashViewModel = hiltViewModel()
 ) {
     val timeLeft = viewModel.timeLeft.collectAsStateWithLifecycle()
     val navigateToMain = viewModel.navigateToMain.collectAsState()

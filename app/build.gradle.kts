@@ -1,5 +1,3 @@
-
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -87,6 +85,7 @@ dependencies {
     //图片加载框架
     //https://github.com/coil-kt/coil
     implementation("io.coil-kt:coil-compose:2.6.0")
+    testImplementation(libs.androidx.espresso.core)
 
     debugImplementation(libs.chucker)
     releaseImplementation(libs.chucker.no.op)
@@ -120,4 +119,25 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
+    // Mockito 核心库
+    testImplementation("org.mockito:mockito-core:5.5.0")
+
+    // Mockito-Kotlin 支持库
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
+
+    // JUnit 5 测试框架
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
+
+    // Android 测试支持库（可选）
+    testImplementation("androidx.test:core:1.5.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    testImplementation("org.robolectric:robolectric:4.10.3")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.1")
+    testImplementation("junit:junit:4.13.2")
+
 }

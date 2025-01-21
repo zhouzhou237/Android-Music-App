@@ -3,14 +3,17 @@ package com.example.app.feature.splash
 import android.content.IntentSender
 import android.os.CountDownTimer
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
 
 
 /*
 启动界面VM
  */
-class SplashViewModel : ViewModel(){
+@HiltViewModel
+class SplashViewModel @Inject constructor() : ViewModel(){
     private var timer: CountDownTimer? = null
     private val _timeLeft = MutableStateFlow(0L)
     val timeLeft: StateFlow<Long> = _timeLeft

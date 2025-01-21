@@ -25,7 +25,9 @@ object Config {
 
     var RESOURCE_ENDPOINT = "https://com-quick-project.oss-cn-beijing.aliyuncs.com/%s"
 
-
     var RESOURCE_ENDPOINT2 = "http://course-music-dev.ixuea.com/%s"
+
+    const val LINK_USER_USER_AGREEMENT = "https://www.ixuea.com/articles/4449"
+    const val LINK_USER_PRIVACY_POLICY = "https://www.ixuea.com/articles/4467"
 
 }

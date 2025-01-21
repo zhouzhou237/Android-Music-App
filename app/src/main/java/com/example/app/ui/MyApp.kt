@@ -4,6 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
+import com.example.app.feature.login.loginScreen
+import com.example.app.feature.login.navigateToLogin
+import com.example.app.feature.loginhome.loginHomeScreen
+import com.example.app.feature.loginhome.navigateToLoginHome
 import com.example.app.feature.main.mainScreen
 import com.example.app.feature.main.navigateToMain
 import com.example.app.feature.sheetdetail.navigateToSheetDetail
@@ -28,7 +32,7 @@ fun MyApp(navController : NavHostController) {
             toMessage = {},
             toScan = {},
             toProfile = {},
-            toLogin = {},
+            toLogin = navController::navigateToLoginHome,
             toCode = {},
             toSetting = {},
             toAbout = {},
@@ -39,6 +43,21 @@ fun MyApp(navController : NavHostController) {
         )
         musicPlayerScreen(
             finishPage = navController::popBackStack,
+        )
+        loginHomeScreen(
+            finishPage = navController::popBackStack,
+            toLogin = navController::navigateToLogin,
+            toCodeLogin = {},
+            finishAllLoginPages = {},
+            toWebPage = {
+
+            },
+        )
+        loginScreen(
+            finishPage = navController::popBackStack,
+            toRegister = {},
+            toSetPassword = {},
+            finishAllLoginPages = {},
         )
     }
 
