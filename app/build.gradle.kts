@@ -101,6 +101,10 @@ dependencies {
 
     compileOnly(libs.ksp.gradlePlugin)
 
+    //自定义toast提示框架
+    //https://github.com/tfaki/ComposableSweetToast
+    implementation("com.github.tfaki:ComposableSweetToast:1.0.1")
+
     val androidx_media3_version = "1.2.1"
     implementation("androidx.media3:media3-exoplayer:$androidx_media3_version")
     implementation("androidx.media3:media3-datasource:$androidx_media3_version")

@@ -1,5 +1,6 @@
 package com.example.app.feature.login
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,14 +30,18 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -51,10 +56,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.app.R
 import com.example.app.core.config.Config
 import com.example.app.core.design.component.MyCenterTopAppBar
+import com.example.app.core.design.component.MySweetError
 import com.example.app.core.design.theme.MyAppTheme
 import com.example.app.core.design.theme.SpaceExtraSmall2
 import com.example.app.core.design.theme.SpaceLarge
 import com.example.app.feature.loginhome.LoginHomeViewModule
+import com.talhafaki.composablesweettoast.util.SweetToastUtil.SweetSuccess
 
 @Composable
 fun LoginRoute(
@@ -64,26 +71,48 @@ fun LoginRoute(
     finishAllLoginPages: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
+    val uiState by viewModel.uiState.collectAsState()
 
     LoginScreen(
+        uiState = uiState,
         finishPage = finishPage,
         toRegister = toRegister,
         toSetPassword = toSetPassword,
         finishAllLoginPages = finishAllLoginPages,
         loginClick = viewModel::onLoginClick,
+        resetUiState = viewModel:: resetUiState,
     )
 
 
+//    LaunchedEffect(key1 = uiState) {
+//        when (val uiState = uiState) {
+//            is LoginUiState.ErrorRes -> {
+//                Toast.makeText(context, uiState.data, Toast.LENGTH_LONG).show()
+//            }
+//            is LoginUiState.Error -> {
+//                Toast.makeText(context, uiState.exception.tipString, Toast.LENGTH_LONG).show()
+//            }
+//            is LoginUiState.Success -> {
+//                finishAllLoginPages()
+//            }else -> {
+//            }
+//        }
+//        viewModel.resetUiState()
+//    }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
+    uiState:LoginUiState = LoginUiState.None,
     finishPage: () -> Unit = {},
     toRegister: () -> Unit= {},
     toSetPassword: () -> Unit= {},
     finishAllLoginPages: () -> Unit= {},
     loginClick: (String, String) -> Unit = { _, _ -> },
+    resetUiState : () -> Unit= {}
 ) {
 
     var username by rememberSaveable {
@@ -173,6 +202,45 @@ fun LoginScreen(
                     )
                 }
             }
+        }
+
+//        when (uiState){
+//            is LoginUiState.ErrorRes -> {
+//                SweetSuccess(
+//                    message = stringResource( id = uiState.data),
+//                    duration = Toast.LENGTH_LONG,
+//                    padding = paddingValues( top =16.dp),
+//                    contentAlignment = Alignment.TopCenter
+//                )
+//            }
+//            is LoginUiState.Error -> {
+//                SweetSuccess(
+//                    message = stringResource(id = uiState.data),
+//                    duration = Toast.LENGTH_LONG,
+//                    padding = paddingValues(top = 16.dp),
+//                    contentAlignment = Alignment.TopCenter
+//                )
+//            }
+//            else ->{
+//            }
+//        }
+
+        when (uiState) {
+            is LoginUiState.ErrorRes -> {
+                MySweetError(
+                    message = stringResource(id = uiState.data),
+                )
+            }
+            is LoginUiState.Error -> {
+                MySweetError(
+                    message = uiState.exception.tipString!!,
+                )
+            }
+            else -> {
+            }
+        }
+        if (uiState != LoginUiState.None) {
+            resetUiState()
         }
     }
 }
