@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CloudMusic</string>
+
+    <!-- Conditions d'utilisation -->
+    <string name="term_service_privacy">Conditions Générales d\'Utilisation et Politique de Confidentialité</string>
+    <string name="agree">Accepter</string>
+    <string name="disagree">Refuser et Quitter l\'Application</string>
+    <string name="home">Accueil</string>
+    <string name="video">Vidéo</string>
+    <string name="me">Moi</string>
+    <string name="feed">Flux</string>
+
+    <string name="wifi_preload">Préchargement WiFi</string>
+    <string name="ad_click_tip">Cliquez pour plus de détails</string>
+    <string name="skip_ad_count">Passer dans %1$ds</string>
+    <string name="not_found_activity">Application introuvable</string>
+    <string name="search_tip">Saisissez ce que vous souhaitez rechercher</string>
+    <string name="product_item_info">%1$s commentaires, retour %2$s%%</string>
+    <string name="phone_or_email">Téléphone ou Email</string>
+    <string name="enter_phone_or_email">Veuillez entrer un numéro de téléphone ou un e-mail</string>
+    <string name="enter_email">Veuillez entrer un e-mail</string>
+    <string name="enter_confirm_password">Veuillez confirmer le mot de passe</string>
+    <string name="enter_code">Veuillez entrer le code de vérification</string>
+    <string name="error_nickname_format">Format du pseudonyme incorrect</string>
+    <string name="error_phone_format">Format du numéro de téléphone incorrect</string>
+    <string name="error_email_format">Format de l\'e-mail incorrect</string>
+    <string name="error_confirm_password_format">Format du mot de passe de confirmation incorrect</string>
+    <string name="error_confirm_password">Les deux mots de passe ne correspondent pas</string>
+    <string name="load_success">Chargement réussi</string>
+    <string name="error_load">Échec du chargement</string>
+    <string name="refresh_success_new_data_added">Rafraîchissement réussi, %1$d nouvelles données ajoutées</string>
+    <string name="refresh_fail_reason">Échec du rafraîchissement, %1$s</string>
+    <string name="error_reason">Raison de l\'erreur : %1$s</string>
+    <string name="unknown_error">Erreur inconnue, veuillez vérifier la connexion réseau et le serveur</string>
+    <string name="error_load_click">Échec du chargement, cliquez pour réessayer</string>
+    <string name="empty_data">Aucune donnée</string>
+    <string name="enter_password">Veuillez entrer un mot de passe (6~15 caractères)</string>
+    <string name="password">Mot de passe</string>
+    <string name="login">Connexion</string>
+    <string name="forgot_password">Mot de passe oublié</string>
+    <string name="error_username_format">Format du nom d\'utilisateur incorrect</string>
+    <string name="error_password_format">Format du mot de passe incorrect</string>
+    <string name="register_and_login">S\'inscrire et se connecter</string>
+    <string name="click_retry">Cliquez pour réessayer</string>
+    <string name="error_connect_server">Impossible de se connecter au serveur, vérifiez si le serveur est actif</string>
+    <string name="error_loading">Échec de la demande de données, consultez le journal des erreurs pour plus de détails, %1$s</string>
+    <string name="error_network_not_connect">Le réseau semble être hors ligne</string>
+    <string name="whole">Tout</string>
+    <string name="wait_pay">Paiement</string>
+    <string name="order_close">Fermé</string>
+    <string name="wait_shipped">Envoi</string>
+    <string name="wait_received">Réception</string>
+    <string name="wait_comment">Avis</string>
+    <string name="complete">Terminé</string>
+    <string name="refund_sales_service">Remboursement/Service après-vente</string>
+    <string name="loading">Chargement...</string>
+    <string name="error_pay_channel">Erreur du canal de paiement</string>
+    <string name="hint_pay_wait">Confirmation du paiement en cours</string>
+    <string name="error_pay_cancel">Paiement annulé</string>
+    <string name="error_pay_failed">Échec du paiement</string>
+    <string name="confirm_back">Confirmer le retour</string>
+    <string name="continue_pay">Continuer à payer</string>
+    <string name="pay_timeout">Délai de paiement expiré</string>
+    <string name="order_timeout_message">Veuillez retourner aux détails du produit et commander à nouveau</string>
+
+    <string name="selected2">Sélectionné</string>
+
+    <string name="sent_to">Envoyer à</string>
+
+    <string name="store">Boutique</string>
+
+    <string name="customer_service">Service Client</string>
+
+    <string name="cart">Panier</string>
+
+    <string name="buy_now">Acheter Maintenant</string>
+
+    <string name="add_cart">Ajouter au Panier</string>
+
+    <string name="add_cart_success">Ajouté au Panier avec Succès</string>
+
+    <string name="experience_now">Découvrir Maintenant</string>
+
+    <string name="login_or_register">Connexion ou Inscription</string>
+
+    <string name="login_error">Échec de la Connexion</string>
+
+    <string name="code_login">Connexion avec Code de Vérification</string>
+
+    <string name="username_login">Connexion avec Identifiant et Mot de Passe</string>
+
+    <string name="login_now">Se Connecter</string>
+
+    <string name="logout">Se Déconnecter</string>
+
+    <string name="register">S\'inscrire</string>
+
+    <string name="hint_interest">Remplissez vos centres d\'intérêt</string>
+
+    <string name="super_vip">VIP</string>
+
+    <string name="mall_vip_hint">Les membres profitent de plus d\'avantages</string>
+
+    <string name="my_collect">Ma Collection</string>
+
+    <string name="coupon">Coupon</string>
+
+    <string name="my_order">Mes Commandes</string>
+
+    <string name="all_order">Toutes les Commandes</string>
+
+    <string name="my_assets">Mes Actifs</string>
+
+    <string name="mall_community">Communauté de Goûts</string>
+
+    <string name="my_wallet">Mon Portefeuille</string>
+
+    <string name="subsidy_venue">Subventions</string>
+
+    <string name="questionnaire_survey">Enquête par Questionnaire</string>
+
+    <string name="office_customer_service">Service Client Officiel</string>
+
+    <string name="friend_assistance">Assistance d\'Amis</string>
+
+    <string name="installment_services">Services de Paiement en Plusieurs Fois</string>
+
+    <string name="user_complaints">Réclamations des Utilisateurs</string>
+
+    <string name="other_function">Autres Fonctions</string>
+
+    <string name="mention">Moments</string>
+
+    <string name="more_service">Plus de Services</string>
+
+    <string name="select_address">Veuillez sélectionner une adresse de livraison</string>
+
+    <string name="default_address_text">[Par Défaut]</string>
+
+    <string name="receiving_address">Adresse</string>
+
+    <string name="receiving_address_detail">Détails de l\'Adresse de Livraison</string>
+
+    <string name="add_receiving_address">Ajouter une Adresse de Livraison</string>
+
+    <string name="success_delete">Supprimé avec Succès</string>
+
+    <string name="select_province">Sélectionnez une Province</string>
+
+    <string name="select_city">Sélectionnez une Ville</string>
+
+    <string name="select_area">Sélectionnez une Zone</string>
+
+    <string name="confirm_delete">Confirmer la Suppression ?</string>
+
+    <string name="select_all">Tout Sélectionner</string>
+
+    <!-- Profil -->
+    <string name="edit">Modifier</string>
+
+    <string name="my_profile">Mon Profil</string>
+
+    <string name="save">Enregistrer</string>
+
+    <string name="avatar">Avatar</string>
+
+    <string name="nickname">Pseudonyme</string>
+
+    <string name="gender">Genre</string>
+
+    <string name="birthday">Date de Naissance</string>
+
+    <string name="area">Zone</string>
+
+    <string name="description">Présentation Personnelle</string>
+
+    <string name="hint_description">Présentez-vous à tout le monde</string>
+
+    <string name="phone">Téléphone</string>
+
+    <string name="email">E-mail</string>
+
+    <string name="third_account">Compte Tiers</string>
+
+    <string name="qq">QQ</string>
+
+    <string name="bind">Lier</string>
+
+    <string name="unbind">Délier</string>
+
+    <string name="weibo">Weibo</string>
+</resources>
