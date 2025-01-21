@@ -2,12 +2,14 @@ package com.example.app.core.network.datasource
 
 import okhttp3.Call
 import com.example.app.core.config.Config
+import com.example.app.core.model.Session
 import com.example.app.core.model.Sheet
 import com.example.app.core.model.Song
+import com.example.app.core.model.User
 import com.example.app.core.model.ViewData
+import com.example.app.core.model.WechatLoginRequest
 import com.example.app.core.model.response.NetworkPageData
 import com.example.app.core.model.response.NetworkResponse
-import com.example.app.core.network.di.NetworkModule
 import com.example.app.core.network.retrofit.MyNetworkApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -47,6 +49,14 @@ class MyRetrofitDatasource @Inject constructor(
 
     override suspend fun sheetDetail(id: String): NetworkResponse<Sheet>{
         return service.sheetDetail(id)
+    }
+
+    override suspend fun login(data: User): NetworkResponse<Session> {
+        return service.login(data)
+    }
+
+    override suspend fun loginWechat(data: WechatLoginRequest): NetworkResponse<Session> {
+        return service.loginWechat(data)
     }
 
 }

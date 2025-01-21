@@ -1,9 +1,12 @@
 package com.example.app.core.network.datasource
 
 import com.example.app.core.config.Config
+import com.example.app.core.model.Session
 import com.example.app.core.model.Sheet
 import com.example.app.core.model.Song
+import com.example.app.core.model.User
 import com.example.app.core.model.ViewData
+import com.example.app.core.model.WechatLoginRequest
 import com.example.app.core.model.response.NetworkPageData
 import com.example.app.core.model.response.NetworkResponse
 import com.example.app.core.network.di.NetworkModule
@@ -24,4 +27,20 @@ interface MyNetworkDatasource {
     suspend fun indexes(app: Int): NetworkResponse<NetworkPageData<ViewData>>
 
     suspend fun sheetDetail(id: String): NetworkResponse<Sheet>
+    /**
+     * 登录
+     */
+    suspend fun login(
+        data: User,
+    ): NetworkResponse<Session>
+    /**
+     * 微信登录
+     *
+     * 通过code
+     */
+    suspend fun loginWechat(
+        data: WechatLoginRequest
+    ): NetworkResponse<Session>
+
+
 }
