@@ -1,3 +1,4 @@
+import com.google.protobuf.gradle.GenerateProtoTask
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -9,6 +10,9 @@ plugins {
     //依赖注入(dependency injection)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+
+    //protobuf插件
+    alias(libs.plugins.protobuf)
 }
 
     android {
@@ -50,6 +54,7 @@ plugins {
 }
 
 dependencies {
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -105,6 +110,12 @@ dependencies {
     //https://github.com/tfaki/ComposableSweetToast
     implementation("com.github.tfaki:ComposableSweetToast:1.0.1")
 
+    //数据存储
+    //https://developer.android.google.cn/topic/libraries/architecture/datastore?hl=zh-cn#prefs-vs-proto
+    implementation("androidx.datastore:datastore:1.0.0")
+
+    implementation(libs.protobuf.kotlin.lite)
+
     val androidx_media3_version = "1.2.1"
     implementation("androidx.media3:media3-exoplayer:$androidx_media3_version")
     implementation("androidx.media3:media3-datasource:$androidx_media3_version")
@@ -144,4 +155,38 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.1")
     testImplementation("junit:junit:4.13.2")
 
+}
+
+protobuf {
+    protoc {
+        artifact = libs.protobuf.protoc.get().toString()
+    }
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins {
+                register("java") {
+                    option("lite")
+                }
+                register("kotlin") {
+                    option("lite")
+                }
+            }
+        }
+    }
+}
+//https://github.com/google/dagger/issues/4097#issuecomment-1763781846
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        afterEvaluate {
+            val protoTask =
+                project.tasks.getByName("generate" + variant.name.replaceFirstChar { it.uppercaseChar() } + "Proto") as GenerateProtoTask
+
+            project.tasks.getByName("ksp" + variant.name.replaceFirstChar { it.uppercaseChar() } + "Kotlin") {
+                dependsOn(protoTask)
+                (this as org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompileTool<*>).setSource(
+                    protoTask.outputBaseDir
+                )
+            }
+        }
+    }
 }

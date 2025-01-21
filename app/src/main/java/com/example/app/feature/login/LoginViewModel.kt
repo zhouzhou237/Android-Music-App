@@ -4,11 +4,13 @@ import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.app.MyApplication
 import com.example.app.R
 import com.example.app.core.model.User
 import com.example.app.util.StringUtil
 import com.example.app.util.SuperRegularUtil
 import com.example.app.core.data.repository.SessionRepository
+import com.example.app.core.data.repository.UserDataRepository
 import com.example.app.core.exception.localException
 import com.example.app.core.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val sessionRepository: SessionRepository,
+    private val userDataRepository: UserDataRepository,
 ): ViewModel() {
 
 
@@ -75,6 +78,16 @@ class LoginViewModel @Inject constructor(
                     if (it.isSuccess){
                         Log.d("TAG", "login: ${it.getOrThrow().data}")
                         val result = it.getOrThrow()
+
+                        // Save login information
+                        val sessionPreferences = result.data!!.toPreferences()
+                        userDataRepository.setSession(sessionPreferences)
+                        userDataRepository.setUser(result.data.user.toPreferences())
+
+                        MyApplication.instance.initAfterLogin(sessionPreferences!!)
+
+                        // Initialize the app after login
+                        // MyApplication.instance.initAfterLogin(sessionPreferences!!)
                         uiState.value = LoginUiState.Success
                     } else {
                         uiState.value = LoginUiState.Error(it.exceptionOrNull()!!.localException())

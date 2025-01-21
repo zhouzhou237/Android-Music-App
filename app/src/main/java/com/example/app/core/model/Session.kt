@@ -1,5 +1,6 @@
 package com.example.app.core.model
 
+import com.example.app.core.datastore.SessionPreferences
 import kotlinx.serialization.Serializable
 
 /**
@@ -27,4 +28,12 @@ data class Session(
      * avoid additional requests and improve efficiency
      */
     val user: User,)
-{}
+{
+    fun toPreferences(): SessionPreferences? {
+        return SessionPreferences.newBuilder()
+            .setUserId(userId)
+            .setSession(session)
+            .setChatToken(chatToken)
+            .build()
+    }
+}

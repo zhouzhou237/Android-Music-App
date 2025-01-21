@@ -1,14 +1,18 @@
 package com.example.app.core.model
 
+import com.example.app.core.datastore.GlobalLyricStylePreferences
+import com.example.app.core.datastore.SessionPreferences
+import com.example.app.core.datastore.UserPreferences
+
 
 data class UserData(
 
 
     val notShowGuide: Boolean = false,
-//    val session: SessionPreferences = SessionPreferences.newBuilder().build(),
-//    val user: UserPreferences = UserPreferences.newBuilder().build(),
+    val session: SessionPreferences = SessionPreferences.newBuilder().build(),
+    val user: UserPreferences = UserPreferences.newBuilder().build(),
     val notShowTermsServiceAgreement: Boolean = false,
-//    val darkThemeConfig: DarkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
+    val darkThemeConfig: DarkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
     val useDynamicColor: Boolean = false,
 
     //播放循环模式
@@ -23,14 +27,13 @@ data class UserData(
     //播放音乐时长
     val playDuration: Long = 0,
 
-//    val globalLyricStyle: GlobalLyricStylePreferences = GlobalLyricStylePreferences.newBuilder()
-//        .build(),
+    val globalLyricStyle: GlobalLyricStylePreferences = GlobalLyricStylePreferences.newBuilder()
+        .build(),
 ) {
     /**
      * 是否已经登录了
      */
     fun isLogin(): Boolean {
-//        return session.userId.isNotBlank()
-        return false
+        return session.userId.isNotBlank()
     }
 }

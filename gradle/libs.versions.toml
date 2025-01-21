@@ -18,7 +18,14 @@ hilt = "2.55"
 hiltNavigationCompose = "1.2.0"
 ksp = "2.0.0-1.0.24"
 
+
+protobuf = "3.25.0"
+protobufPlugin = "0.9.4"
+
 [libraries]
+protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
+protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
+
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -55,6 +62,10 @@ hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", vers
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 [plugins]
+#https://github.com/google/protobuf-gradle-plugin
+protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
+
+
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
