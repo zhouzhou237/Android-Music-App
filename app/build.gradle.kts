@@ -90,6 +90,7 @@ dependencies {
     //图片加载框架
     //https://github.com/coil-kt/coil
     implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation(libs.androidx.room.common)
     testImplementation(libs.androidx.espresso.core)
 
     debugImplementation(libs.chucker)

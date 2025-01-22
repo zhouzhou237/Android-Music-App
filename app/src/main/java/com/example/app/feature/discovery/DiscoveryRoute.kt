@@ -1,11 +1,9 @@
 package com.example.app.feature.discovery
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -16,8 +14,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -32,36 +33,27 @@ import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.app.R
-import com.example.app.core.design.theme.LocalDividerColor
+import com.example.app.core.design.theme.ArrowIcon
 import com.example.app.core.design.theme.MyAppTheme
 import com.example.app.core.design.theme.SpaceExtraMedium
 import com.example.app.core.design.theme.SpaceOuter
-import com.example.app.core.design.theme.SpaceSmall
-import com.example.app.core.design.theme.SpaceSmallHeight
 import com.example.app.core.model.Song
-import com.example.app.core.ui.DiscoveryPreviewParameterData
-import com.example.app.core.ui.DiscoveryPreviewParameterData.SONGS
-import com.example.app.core.ui.DiscoveryPreviewParameterProvider
-import androidx.compose.runtime.getValue
-import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
 import com.example.app.core.model.ViewData
-import com.example.app.feature.sheet.ItemSheet
+import com.example.app.core.ui.DiscoveryPreviewParameterProvider
+import com.example.app.feature.sheet.ItemSheetGrid
 import com.example.app.feature.song.component.ItemSong
-import com.example.app.util.ResourceUtil
 
 
 @Composable
@@ -88,6 +80,8 @@ fun DiscoveryScreen(
     topDatum:List<ViewData> = listOf(),
     toSheetDetail: (String) -> Unit = {},
 ) {
+    val gridState = rememberLazyGridState()
+
     Scaffold(
         topBar = {
             DiscoveryTopBar(
@@ -108,26 +102,82 @@ fun DiscoveryScreen(
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(paddingValues)
         ) {
-            LazyColumn(
-                contentPadding = PaddingValues(horizontal = SpaceOuter),
+            LazyVerticalGrid(
+                state = gridState,
+                columns = GridCells.Fixed(3),
+                contentPadding = PaddingValues(
+                    horizontal = SpaceOuter
+                ),
                 verticalArrangement = Arrangement.spacedBy(SpaceExtraMedium),
-                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(SpaceExtraMedium),
+                modifier = Modifier.fillMaxSize()
             ) {
                 topDatum.forEach { viewData ->
                     if(viewData.sheets != null){
+                        item(
+                            span = {
+                                GridItemSpan(maxLineSpan)
+                            }
+                        ) {
+                            ItemDiscoveryTitle(
+                                title = R.string.recommend_song
+                            )
+                        }
                         items(viewData.sheets){ sheet ->
-                            ItemSheet(data = sheet, modifier = Modifier.clickable {
+                            ItemSheetGrid(data = sheet, modifier = Modifier.clickable {
                                 toSheetDetail(sheet.id)
                             })
                         }
                     }else if(viewData.songs != null){
-                        items(viewData.songs){ song ->
+                        item(
+                            span = {
+                                GridItemSpan(maxLineSpan)
+                            }
+                        ) {
+                            ItemDiscoveryTitle(
+                                title = R.string.recommend_song
+                            )
+                        }
+
+                        items(viewData.songs, span = {
+                            GridItemSpan(maxLineSpan)
+                        }){ song ->
                             ItemSong(data = song)
                         }
                     }
                 }
             }
         }
+    }
+}
+
+
+@Composable
+fun ItemDiscoveryTitle(title: Int) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Text(
+            text = stringResource(id = title),
+            style = MaterialTheme.typography.titleLarge.copy(
+                fontWeight = FontWeight.Bold
+            ),
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier
+                .padding(vertical = SpaceOuter)
+                .weight(1f),
+        )
+
+        Text(
+            text = stringResource(id = R.string.show_more),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.outline,
+            modifier = Modifier
+        )
+
+        ArrowIcon()
     }
 }
 

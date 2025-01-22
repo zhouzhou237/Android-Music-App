@@ -1,0 +1,26 @@
+package com.example.app.feature.register
+
+import com.example.app.core.exception.CommonException
+
+
+sealed interface RegisterUiState {
+    /**
+     * 成功
+     */
+    data object Success : RegisterUiState
+
+    /**
+     * 加载中
+     */
+    data object Loading : RegisterUiState
+
+    data object None : RegisterUiState
+
+    data class Error(
+        val exception: CommonException,
+    ) : RegisterUiState
+
+    data class ErrorRes(
+        val data: Int,
+    ) : RegisterUiState
+}

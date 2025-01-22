@@ -1,8 +1,11 @@
 package com.example.app.core.network.di
 
+import android.util.Log
 import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.example.app.MyAppState
 import com.example.app.MyApplication
 import com.example.app.core.config.Config
+import com.example.app.util.Constant
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,10 +49,37 @@ class NetworkModule {
                 )
             })
 
-            //添加chucker实现应用内显示网络请求信息拦截器
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                setLevel(
+                    if (Config.DEBUG)
+                        HttpLoggingInterceptor.Level.BODY
+                    else
+                        HttpLoggingInterceptor.Level.NONE
+                )
+            })
+
             .addInterceptor(ChuckerInterceptor.Builder(MyApplication.instance).build())
 
+            .addInterceptor {
+                var request = it.request()
+
+                if (MyAppState.session.isNotBlank()) {
+
+                    Log.d(TAG, "providesOkHttpClient auth: ${MyAppState.session}")
+
+                    request = request.newBuilder()
+                        .header(Constant.HEADER_AUTH, MyAppState.session)
+                        .build()
+                }
+
+                it.proceed(request)
+            }
+
             .build()
+    }
+
+    companion object {
+        const val TAG = "NetworkModule"
     }
 
 }

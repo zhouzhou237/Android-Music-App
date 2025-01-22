@@ -1,6 +1,8 @@
 package com.example.app.core.network.datasource
 
 import com.example.app.core.config.Config
+import com.example.app.core.model.BaseId
+import com.example.app.core.model.BaseModel
 import com.example.app.core.model.Session
 import com.example.app.core.model.Sheet
 import com.example.app.core.model.Song
@@ -14,6 +16,7 @@ import com.example.app.core.network.retrofit.MyNetworkApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import retrofit2.http.Body
 import retrofit2.http.Query
 
 interface MyNetworkDatasource {
@@ -42,5 +45,17 @@ interface MyNetworkDatasource {
         data: WechatLoginRequest
     ): NetworkResponse<Session>
 
+    suspend fun register(
+        @Body data: User,
+    ): NetworkResponse<BaseId>
 
+    suspend fun setPassword(
+        @Body data: User
+    ): NetworkResponse<BaseId>
+
+    suspend fun userDetail(id: String): NetworkResponse<User>
+
+    suspend fun updateUser(
+        @Body data: User
+    ): NetworkResponse<BaseModel>
 }

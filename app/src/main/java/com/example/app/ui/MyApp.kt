@@ -12,6 +12,8 @@ import com.example.app.feature.loginhome.loginHomeScreen
 import com.example.app.feature.loginhome.navigateToLoginHome
 import com.example.app.feature.main.mainScreen
 import com.example.app.feature.main.navigateToMain
+import com.example.app.feature.register.navigateToRegister
+import com.example.app.feature.register.registerScreen
 import com.example.app.feature.sheetdetail.navigateToSheetDetail
 import com.example.app.feature.sheetdetail.sheetDetailScreen
 import com.example.app.feature.splash.SPLASH_ROUTE
@@ -62,8 +64,12 @@ fun MyApp(
         )
         loginScreen(
             finishPage = navController::popBackStack,
-            toRegister = {},
+            toRegister = navController::navigateToRegister,
             toSetPassword = {},
+            finishAllLoginPages = navController::finishAllLoginPages,
+        )
+        registerScreen(
+            finishPage = navController::popBackStack,
             finishAllLoginPages = navController::finishAllLoginPages,
         )
     }

@@ -517,12 +517,21 @@ private fun UserProfile(
             }
     ) {
 
-        AsyncImage(
-            model = ResourceUtil.r(data.icon),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = userIconModifier,
+        if (TextUtils.isEmpty(data.icon)) {
+            Image(
+                painter = painterResource(id = R.drawable.default_avatar),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = userIconModifier,
             )
+        } else {
+            AsyncImage(
+                model = ResourceUtil.r(data.icon),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = userIconModifier,
+            )
+        }
 
 
         SpaceMediumWidth()

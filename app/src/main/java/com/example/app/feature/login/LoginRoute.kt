@@ -122,13 +122,13 @@ fun LoginScreen(
 
     var username by rememberSaveable {
         mutableStateOf(
-            if (Config.DEBUG) "13141111222" else ""
+            if (Config.DEBUG) "foothomasli@gmail.com" else ""
         )
     }
 
     var password by rememberSaveable {
         mutableStateOf(
-            if (Config.DEBUG) "ixueaedu" else ""
+            if (Config.DEBUG) "1@@Fcbrmnh" else ""
         )
     }
 

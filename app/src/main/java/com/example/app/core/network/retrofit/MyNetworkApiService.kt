@@ -1,5 +1,7 @@
 package com.example.app.core.network.retrofit
 
+import com.example.app.core.model.BaseId
+import com.example.app.core.model.BaseModel
 import com.example.app.core.model.Session
 import com.example.app.core.model.Sheet
 import com.example.app.core.model.Song
@@ -40,5 +42,21 @@ interface MyNetworkApiService {
     @GET("v1/sheets/info")
     suspend fun sheetDetail( @Query(value = "id") id: String): NetworkResponse<Sheet>
 
+    @POST("v1/users/reset_password")
+    suspend fun setPassword(
+        @Body data: User
+    ): NetworkResponse<BaseId>
 
+    @POST("v1/users/add")
+    suspend fun register(
+        @Body data: User,
+    ): NetworkResponse<BaseId>
+
+    @GET("v1/users/info")
+    suspend fun userDetail(@Query(value = "id") id: String): NetworkResponse<User>
+
+    @POST("v1/users/update")
+    suspend fun updateUser(
+        @Body data: User
+    ): NetworkResponse<BaseModel>
 }

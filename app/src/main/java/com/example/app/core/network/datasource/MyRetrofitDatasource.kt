@@ -2,6 +2,8 @@ package com.example.app.core.network.datasource
 
 import okhttp3.Call
 import com.example.app.core.config.Config
+import com.example.app.core.model.BaseId
+import com.example.app.core.model.BaseModel
 import com.example.app.core.model.Session
 import com.example.app.core.model.Sheet
 import com.example.app.core.model.Song
@@ -59,4 +61,19 @@ class MyRetrofitDatasource @Inject constructor(
         return service.loginWechat(data)
     }
 
+    override suspend fun userDetail(id: String): NetworkResponse<User> {
+        return service.userDetail(id)
+    }
+
+    override suspend fun updateUser(data: User): NetworkResponse<BaseModel> {
+        return service.updateUser(data)
+    }
+
+    override suspend fun register(data: User): NetworkResponse<BaseId> {
+        return service.register(data)
+    }
+
+    override suspend fun setPassword(data: User): NetworkResponse<BaseId> {
+        return service.setPassword(data)
+    }
 }
