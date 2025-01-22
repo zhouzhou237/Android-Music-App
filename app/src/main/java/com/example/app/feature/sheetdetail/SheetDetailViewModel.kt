@@ -5,6 +5,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.app.core.data.repository.SheetRepository
+import com.example.app.core.data.repository.SongRepository
+import com.example.app.core.data.repository.UserDataRepository
+import com.example.app.core.data.repository.UserRepository
 import com.example.app.core.exception.localException
 import com.example.app.core.media.MediaServiceConnection
 import com.example.app.core.model.Sheet
@@ -26,8 +29,11 @@ class SheetDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val sheetRepository: SheetRepository,
     mediaServiceConnection: MediaServiceConnection,
+    songRepository: SongRepository,
+    private val userRepository: UserRepository,
 ) : BaseMediaPlayerViewModel(
     mediaServiceConnection,
+    songRepository,
 ) {
     val sheetId: String = checkNotNull(savedStateHandle[SHEET_ID])
 

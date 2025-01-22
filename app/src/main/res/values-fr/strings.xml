@@ -11,6 +11,12 @@
     <string name="me">Moi</string>
     <string name="feed">Flux</string>
 
+
+    <string name="enter_phone">Veuillez entrer votre numéro de téléphone portable</string>
+    <string name="show_more">Afficher plus</string>
+    <string name="sheet">Listes de lecture</string>
+    <string name="collect">Collect</string>
+    <string name="recommend_sheet"> Lecture Recommandées</string>
     <string name="wifi_preload">Préchargement WiFi</string>
     <string name="ad_click_tip">Cliquez pour plus de détails</string>
     <string name="skip_ad_count">Passer dans %1$ds</string>
@@ -63,7 +69,7 @@
     <string name="continue_pay">Continuer à payer</string>
     <string name="pay_timeout">Délai de paiement expiré</string>
     <string name="order_timeout_message">Veuillez retourner aux détails du produit et commander à nouveau</string>
-
+    <string name="confirm_password">Confirmer Password</string>
     <string name="selected2">Sélectionné</string>
 
     <string name="sent_to">Envoyer à</string>

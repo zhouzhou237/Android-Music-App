@@ -40,6 +40,7 @@ fun NavGraphBuilder.mainScreen(
     toLogin: () -> Unit,
     toSetting: () -> Unit,
     toAbout: () -> Unit,
+    toMusicPlayer: () -> Unit,
 ) {
     composable(MAIN_ROUTE) {
         MainRoute(
@@ -54,6 +55,7 @@ fun NavGraphBuilder.mainScreen(
             toScan = toScan,
             toSetting = toSetting,
             toAbout = toAbout,
+            toMusicPlayer = toMusicPlayer,
         )
     }
 }

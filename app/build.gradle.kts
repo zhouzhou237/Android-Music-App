@@ -115,6 +115,50 @@ dependencies {
     //https://developer.android.google.cn/topic/libraries/architecture/datastore?hl=zh-cn#prefs-vs-proto
     implementation("androidx.datastore:datastore:1.0.0")
 
+    //region room数据库
+    //https://developer.android.com/training/data-storage/room?hl=zh-cn
+
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    //annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    // To use Kotlin annotation processing tool (kapt)
+//    kapt("androidx.room:room-compiler:$room_version")
+    // To use Kotlin Symbol Processing (KSP)
+    ksp("androidx.room:room-compiler:$room_version")
+
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation("androidx.room:room-ktx:$room_version")
+
+    // optional - RxJava2 support for Room
+//    implementation("androidx.room:room-rxjava2:$room_version")
+
+    // optional - RxJava3 support for Room
+//    implementation("androidx.room:room-rxjava3:$room_version")
+
+    // optional - Guava support for Room, including Optional and ListenableFuture
+//    implementation("androidx.room:room-guava:$room_version")
+
+    // optional - Test helpers
+    testImplementation("androidx.room:room-testing:$room_version")
+
+    // optional - Paging 3 Integration
+    implementation("androidx.room:room-paging:$room_version")
+    //endregion
+
+
+    //region emo框架
+    //提供很多功能,例如:图片选择,预览,网络状态监听等
+    //https://github.com/cgspine/emo-public
+    implementation(platform("cn.qhplus.emo:bom:2023.08.00"))
+
+    // 默认使用 coil 作为图片加载器
+    implementation("cn.qhplus.emo:photo-coil")
+    // 可选：如果需要使用其它库，则引入 photo 库，自定义实现 PhotoProvider 即可
+    implementation("cn.qhplus.emo:photo")
+    //endregion
+
     implementation(libs.protobuf.kotlin.lite)
 
     val androidx_media3_version = "1.2.1"
@@ -175,6 +219,7 @@ protobuf {
         }
     }
 }
+
 //https://github.com/google/dagger/issues/4097#issuecomment-1763781846
 androidComponents {
     onVariants(selector().all()) { variant ->

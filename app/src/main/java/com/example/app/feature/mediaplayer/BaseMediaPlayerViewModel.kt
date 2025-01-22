@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.MimeTypes
+import com.example.app.core.data.repository.SongRepository
+import com.example.app.core.data.repository.UserDataRepository
 import com.example.app.core.media.MediaServiceConnection
 import com.example.app.core.model.Song
 import com.example.app.core.model.from
@@ -17,6 +19,7 @@ import kotlinx.coroutines.launch
 
 open class BaseMediaPlayerViewModel(
     protected val mediaServiceConnection: MediaServiceConnection,
+    protected val songRepository: SongRepository,
 
     ) : ViewModel() {
 
@@ -34,6 +37,12 @@ open class BaseMediaPlayerViewModel(
 //        started = SharingStarted.WhileSubscribed(5_000),
 //        initialValue = PlaybackMode.REPEAT_LIST,
 //    )
+    val datum = songRepository.getAllPlayList().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = emptyList(),
+    )
+
 
     public fun setMediasAndPlay(
         datum: List<Song>,
@@ -41,7 +50,20 @@ open class BaseMediaPlayerViewModel(
         navigateToMusicPlayer: Boolean = false,
     ) {
         viewModelScope.launch {
+            //将原来播放列表所有音乐playlist该为false
+            songRepository.clearAllPlayList()
 
+            //保存播放列表
+            songRepository.insertList(datum.map {
+                it.toSongEntity()
+            })
+
+//            val songs = datum.mapIndexed { index, song ->
+//                song.copy(
+//                    totalTrackCount = datum.size,
+//                    trackNumber = index,
+//                )
+//            }
             //转为MediaItem
             val mediaItems = datum.map {
                 MediaItem.Builder()
@@ -55,7 +77,7 @@ open class BaseMediaPlayerViewModel(
                                 .apply {
                                     setArtworkUri(Uri.parse(ResourceUtil.r2(it.icon))) // Used by ExoPlayer and Notification
                                     // Keep the original artwork URI for being included in Cast metadata object.
-//                                        val extras = Bundle()
+//                                       val extras = Bundle()
 //                                        extras.putString(ORIGINAL_ARTWORK_URI_KEY, it.image)
 //                                        setExtras(extras)
                                 }

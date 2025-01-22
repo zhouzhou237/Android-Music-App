@@ -45,6 +45,7 @@ fun MyApp(
             toCode = {},
             toSetting = {},
             toAbout = {},
+            toMusicPlayer = navController::navigateToMusicPlayer
         )
         sheetDetailScreen(
             finishPage = navController::popBackStack,

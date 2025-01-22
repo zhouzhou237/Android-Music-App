@@ -1,7 +1,10 @@
 package com.example.app.core.model
 
+import android.net.Uri
 import androidx.media3.common.MediaMetadata
+import com.example.app.core.database.model.SongEntity
 import com.example.app.util.Constant
+import com.example.app.util.ResourceUtil
 import kotlinx.serialization.Serializable
 
 
@@ -61,7 +64,24 @@ data class Song(
      */
     val totalTrackCount: Int = 1,
 
-)
+){
+    fun toSongEntity():SongEntity{
+        return SongEntity(
+            id = id,
+            title=title,
+            uri = ResourceUtil.r2(uri),
+            icon = icon,
+            album =  album,
+            artist = artist,
+            genre = genre,
+            lyricStyle = lyricStyle,
+            lyric = lyric,
+            trackNumber = trackNumber,
+            totalTrackCount =totalTrackCount,
+            playList = true,
+        )
+    }
+}
 
 fun MediaMetadata.Builder.from(data: Song): MediaMetadata.Builder {
     setTitle(data.title)
@@ -74,6 +94,27 @@ fun MediaMetadata.Builder.from(data: Song): MediaMetadata.Builder {
     setIsBrowsable(false)
     setMediaType(MediaMetadata.MEDIA_TYPE_MUSIC)
     setIsPlayable(true)
+    // The duration from the JSON is given in seconds, but the rest of the code works in
+    // milliseconds. Here's where we convert to the proper units.
+//    val durationMs = TimeUnit.SECONDS.toMillis(data.duration)
+//    val bundle = Bundle()
+//    bundle.putLong("durationMs", durationMs)
+    return this
+}
+
+fun MediaMetadata.Builder.from(data: SongEntity): MediaMetadata.Builder {
+    setTitle(data.title)
+    setDisplayTitle(data.title)
+    setArtist(data.artist)
+    setAlbumTitle(data.album)
+    setGenre(data.genre)
+    setGenre(data.genre)
+    setTrackNumber(data.trackNumber)
+    setTotalTrackCount(data.totalTrackCount)
+    setIsBrowsable(false)
+    setMediaType(MediaMetadata.MEDIA_TYPE_MUSIC)
+    setIsPlayable(true)
+    setArtworkUri(Uri.parse(ResourceUtil.r2(data.icon)))
     // The duration from the JSON is given in seconds, but the rest of the code works in
     // milliseconds. Here's where we convert to the proper units.
 //    val durationMs = TimeUnit.SECONDS.toMillis(data.duration)

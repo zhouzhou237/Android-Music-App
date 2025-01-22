@@ -3,8 +3,11 @@ package com.example.app.feature.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.app.MyApplication
+import com.example.app.core.data.repository.SongRepository
 import com.example.app.core.data.repository.UserDataRepository
+import com.example.app.core.media.MediaServiceConnection
 import com.example.app.core.model.UserData
+import com.quick.app.feature.mediaplayer.BaseMediaPlayerViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -16,10 +19,13 @@ import javax.inject.Inject
 class MainViewModel
 @Inject
 constructor(
+    songRepository: SongRepository,
+    mediaServiceConnection: MediaServiceConnection,
     private val userDataRepository: UserDataRepository,
-): ViewModel() {
-
-
+): BaseMediaPlayerViewModel(
+    mediaServiceConnection,
+    songRepository,
+    ) {
     fun onLogoutClick() {
         MyApplication.instance.logout()
     }

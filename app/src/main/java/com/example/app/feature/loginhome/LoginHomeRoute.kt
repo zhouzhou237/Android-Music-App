@@ -178,18 +178,18 @@ fun BottomView(
             )
 
             OtherLoginButton(
-                icon = R.drawable.passport_sns_qq,
+                icon = R.drawable.passport_sns_facebook,
                 onClick = {
 
                 }
             )
 
             OtherLoginButton(
-                icon = R.drawable.passport_sns_weibo
+                icon = R.drawable.passport_sns_google
             )
 
             OtherLoginButton(
-                icon = R.drawable.passport_sns_google
+                icon = R.drawable.passport_sns_ins
             )
         }
 

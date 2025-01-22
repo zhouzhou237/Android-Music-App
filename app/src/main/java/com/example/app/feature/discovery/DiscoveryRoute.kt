@@ -120,7 +120,7 @@ fun DiscoveryScreen(
                             }
                         ) {
                             ItemDiscoveryTitle(
-                                title = R.string.recommend_song
+                                title = R.string.recommend_sheet
                             )
                         }
                         items(viewData.sheets){ sheet ->
@@ -135,7 +135,7 @@ fun DiscoveryScreen(
                             }
                         ) {
                             ItemDiscoveryTitle(
-                                title = R.string.recommend_song
+                                title = R.string.collect
                             )
                         }
 

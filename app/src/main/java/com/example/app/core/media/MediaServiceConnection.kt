@@ -9,12 +9,18 @@ import androidx.media3.common.Player
 
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
+import com.example.app.core.data.repository.SongRepository
+import com.example.app.core.data.repository.UserDataRepository
+import com.example.app.core.database.model.SongEntity
+import com.example.app.core.database.model.asMediaItem
+import com.example.app.core.model.PlaybackMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
@@ -24,6 +30,8 @@ import kotlin.time.Duration.Companion.milliseconds
 open class MediaServiceConnection(
     context: Context,
     serviceComponent: ComponentName,
+    private val songRepository: SongRepository,
+    private val userDataRepository: UserDataRepository,
 ) {
 
     private var mediaController: MediaController? = null
@@ -40,7 +48,7 @@ open class MediaServiceConnection(
 
     private val playerListener: PlayerListener = PlayerListener()
     private lateinit var currentPlayer: Player
-
+    private var lastPosition: Long = 0
     private inner class PlayerListener : Player.Listener {
 
         override fun onEvents(player: Player, events: Player.Events) {
@@ -89,66 +97,88 @@ open class MediaServiceConnection(
 
             mediaController!!.addListener(playerListener)
 
-//            initPlayList()
+            initPlayList()
         }
     }
+    private suspend fun initPlayList() {
+        val datum = songRepository.getAllPlayListAsync()
+        if (datum.isEmpty()) return
 
+        val userData = userDataRepository.userData.first()
+        val startIndex = datum.indexOfFirst { it.id == userData.playMusicId }
 
-    private fun updatePlaybackState(player: Player) {
-        playbackState.value =
-            PlaybackState(
-                player.playbackState,
-                player.playWhenReady,
-                player.duration
-            )
-        currentPosition.value = player.currentPosition
-        checkPublishProgressTask()
+        mediaController?.run {
+            setMedias(datum.map(SongEntity::asMediaItem), startIndex, userData.playProgress)
+//            if (userData.playRepeatMode.ordinal == PlaybackMode.REPEAT_SHUFFLE.ordinal) {
+//                shuffleModeEnabled = true
+//                repeatMode = Player.REPEAT_MODE_ALL
+//            } else {
+//                shuffleModeEnabled = false
+//                repeatMode =
+//                    if (userData.playRepeatMode.ordinal == PlaybackMode.REPEAT_ONE.ordinal) {
+//                        Player.REPEAT_MODE_ONE
+//                    } else
+//                       Player.REPEAT_MODE_ALL
+//            }
+
+            prepare()
+        }
     }
+        private fun updatePlaybackState(player: Player) {
+            playbackState.value =
+                PlaybackState(
+                    player.playbackState,
+                    player.playWhenReady,
+                    player.duration
+                )
+            currentPosition.value = player.currentPosition
+            checkPublishProgressTask()
+        }
 
-    private fun checkPublishProgressTask() {
-        if (playbackState.value.isPlaying) {
-            if (publishProgressJob != null) {
+        private fun checkPublishProgressTask() {
+            if (playbackState.value.isPlaying) {
+                if (publishProgressJob != null) {
+                    return
+                }
+
+                //Progress updates every 16 milliseconds
+                publishProgressJob = scope.launch {
+                    while (playbackState.value.isPlaying) {
+                        currentPosition.value = mediaController?.currentPosition ?: 0
+//                    Timber.d("MusicServiceConnection publish currentPosition ${currentPosition.value}")
+                        delay(16.milliseconds)
+                        //Save playback progress after an interval of more than 2 seconds
+                    if (currentPosition.value - lastPosition >= 2000) {
+                        userDataRepository.saveRecentSong(
+                            mediaController!!.currentMediaItem!!.mediaId,
+                            currentPosition.value,
+                            playbackState.value.duration,
+                        )
+//                        Timber.d("MusicServiceConnection save currentPosition ${currentPosition.value}")
+                        lastPosition = currentPosition.value
+                    }
+                    }
+                }
+            } else {
+                publishProgressJob?.cancel()
+                publishProgressJob = null
+            }
+        }
+
+
+        private fun updateNowPlaying(player: Player) {
+            val mediaItem = player.currentMediaItem ?: MediaItem.EMPTY
+            if (mediaItem == MediaItem.EMPTY) {
                 return
             }
-
-            //Progress updates every 16 milliseconds
-            publishProgressJob = scope.launch {
-                while (playbackState.value.isPlaying) {
-                    currentPosition.value = mediaController?.currentPosition ?: 0
-//                    Timber.d("MusicServiceConnection publish currentPosition ${currentPosition.value}")
-                    delay(16.milliseconds)
-                    //Save playback progress after an interval of more than 2 seconds
-//                    if (currentPosition.value - lastPosition >= 2000) {
-//                        userDataRepository.saveRecentSong(
-//                            mediaController!!.currentMediaItem!!.mediaId,
-//                            currentPosition.value,
-//                            playbackState.value.duration,
-//                        )
-////                        Timber.d("MusicServiceConnection save currentPosition ${currentPosition.value}")
-//                        lastPosition = currentPosition.value
-//                    }
-                }
-            }
-        } else {
-            publishProgressJob?.cancel()
-            publishProgressJob = null
-        }
-    }
-
-
-    private fun updateNowPlaying(player: Player) {
-        val mediaItem = player.currentMediaItem ?: MediaItem.EMPTY
-        if (mediaItem == MediaItem.EMPTY) {
-            return
-        }
-        nowPlaying.value = mediaItem
+            nowPlaying.value = mediaItem
 
 //        playbackState.value = PlaybackState(
 //            duration = mediaController?.duration ?: 0
 //        )
 //        currentPosition.value = mediaController?.currentPosition ?: 0
 
-        // The current media item from the CastPlayer may have lost some information.
+            // The current media item from the CastPlayer may have lost some information.
 //        val mediaItemFuture = mediaController!!.getItem(mediaItem.mediaId)
 //        mediaItemFuture.addListener(
 //            Runnable {
@@ -159,94 +189,101 @@ open class MediaServiceConnection(
 //            },
 //            MoreExecutors.directExecutor()
 //        )
-    }
-
-
-    fun setMediasAndPlay(datum: List<MediaItem>, startIndex: Int) {
-        setMedias(datum,startIndex)
-
-        mediaController!!.prepare()
-        mediaController!!.play()
-    }
-
-    fun setMedias(datum: List<MediaItem>, startIndex: Int, startPositionMs: Long = 0) {
-        mediaController!!.setMediaItems(
-            datum, startIndex, startPositionMs
-        )
-    }
-
-    fun playOrPause() {
-        mediaController?.run {
-            if (isPlaying) {
-                pause()
-            } else {
-                play()
-            }
         }
-    }
 
-    fun seekToPrevious() {
-        mediaController?.run {
-            seekToPrevious()
-            play()
+
+        fun setMediasAndPlay(datum: List<MediaItem>, startIndex: Int) {
+            setMedias(datum, startIndex)
+
+            mediaController!!.prepare()
+            mediaController!!.play()
         }
-    }
 
-    fun seekToNext() {
-        mediaController?.run {
-            seekToNext()
-            play()
+        fun setMedias(datum: List<MediaItem>, startIndex: Int, startPositionMs: Long = 0) {
+            mediaController!!.setMediaItems(
+                datum, startIndex, startPositionMs
+            )
         }
-    }
 
-    fun pause() {
-        mediaController?.run {
-            if (isPlaying) {
-                pause()
-            }
-        }
-    }
-
-
-    fun seekTo(data: Long) {
-        mediaController?.run {
-            seekTo(data)
-            if (!isPlaying) {
-                play()
-            }
-        }
-    }
-
-
-    private inner class MediaControllerListener : MediaController.Listener {
-        override fun onDisconnected(controller: MediaController) {
-            release()
-        }
-    }
-
-    fun release() {
-        nowPlaying.value = NOTHING_PLAYING
-        mediaController?.let {
-            it.removeListener(playerListener)
-            it.release()
-        }
-        instance = null
-    }
-
-
-
-    companion object{
-
-        private const val TAG = "MediaServiceConnection"
-
-        @Volatile
-        private var instance: MediaServiceConnection? = null
-
-        fun getInstance(context: Context, serviceComponent: ComponentName) =
-            instance ?: synchronized(this) {
-                instance ?: MediaServiceConnection(context, serviceComponent).also {
-                    instance = it
+        fun playOrPause() {
+            mediaController?.run {
+                if (isPlaying) {
+                    pause()
+                } else {
+                    play()
                 }
             }
+        }
+
+        fun seekToPrevious() {
+            mediaController?.run {
+                seekToPrevious()
+                play()
+            }
+        }
+
+        fun seekToNext() {
+            mediaController?.run {
+                seekToNext()
+                play()
+            }
+        }
+
+        fun pause() {
+            mediaController?.run {
+                if (isPlaying) {
+                    pause()
+                }
+            }
+        }
+
+
+        fun seekTo(data: Long) {
+            mediaController?.run {
+                seekTo(data)
+                if (!isPlaying) {
+                    play()
+                }
+            }
+        }
+
+
+        private inner class MediaControllerListener : MediaController.Listener {
+            override fun onDisconnected(controller: MediaController) {
+                release()
+            }
+        }
+
+        fun release() {
+            nowPlaying.value = NOTHING_PLAYING
+            mediaController?.let {
+                it.removeListener(playerListener)
+                it.release()
+            }
+            instance = null
+        }
+
+
+        companion object {
+            private const val TAG = "MediaServiceConnection"
+
+            @Volatile
+            private var instance: MediaServiceConnection? = null
+
+            fun getInstance(
+                context: Context, serviceComponent: ComponentName,
+                songRepository: SongRepository,
+                userDataRepository: UserDataRepository,
+            ) =
+                instance ?: synchronized(this) {
+                    instance ?: MediaServiceConnection(
+                        context,
+                        serviceComponent,
+                        songRepository,
+                        userDataRepository
+                    ).also {
+                        instance = it
+                    }
+                }
+        }
     }
-}

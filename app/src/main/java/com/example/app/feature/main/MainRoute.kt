@@ -51,8 +51,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.app.R
+import com.example.app.core.database.model.SongEntity
 import com.example.app.core.datastore.UserPreferences
 import com.example.app.core.design.component.MyNavigationBar
 import com.example.app.core.design.theme.ArrowIcon
@@ -72,6 +74,7 @@ import com.example.app.core.model.UserData
 import com.example.app.feature.discovery.DiscoveryRoute
 import com.example.app.feature.feed.FeedRoute
 import com.example.app.feature.me.MeRoute
+import com.example.app.feature.mediaplayer.MyMusicPlayerBottomBar
 import com.example.app.feature.shortvideo.ShortVideoRoute
 import com.example.app.ui.MyAppUiState
 import com.example.app.util.Constant
@@ -91,12 +94,13 @@ fun MainRoute(
     toLogin: () -> Unit,
     toSetting: () -> Unit = {},
     toAbout: () -> Unit = {},
+    toMusicPlayer: () -> Unit,
     viewModel: MainViewModel = hiltViewModel()
 ) {
 
     val isLogin by appUiState.isLogin.collectAsState()
     val userData by appUiState.userData.collectAsState()
-
+    val musicDatum by viewModel.datum.collectAsStateWithLifecycle()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -135,6 +139,8 @@ fun MainRoute(
         MainScreen(
             toSheetDetail = toSheetDetail,
             toggleDrawer = toggleDrawer,
+            datum = musicDatum,
+            toMusicPlayer = toMusicPlayer,
         )
     }
 
@@ -564,6 +570,8 @@ fun MainScreen(
     finishPage: () -> Unit = {},
     toSheetDetail: (String) -> Unit = {},
     toggleDrawer: () -> Unit = {},
+    datum: List<SongEntity> = listOf(),
+    toMusicPlayer:()->Unit ={},
 
 ) {
     //Name of the currently selected interface
@@ -603,6 +611,29 @@ fun MainScreen(
                 3 -> FeedRoute()
             }
         }
+
+        if(datum.isNotEmpty()) {
+            Text(text =  "播放列表", modifier = Modifier.clickable{
+                toMusicPlayer
+            })
+    }
+        //音乐控制
+//        if (nowPlaying.mediaId.isNotBlank()) {
+//            MyMusicPlayerBottomBar(
+//                title = nowPlaying.mediaMetadata.title.toString(),
+//                artist = nowPlaying.mediaMetadata.artist.toString(),
+//                icon = nowPlaying.mediaMetadata.artworkUri.toString(),
+//                isPlaying = playbackState.isPlaying,
+//                currentPosition = currentPosition,
+//                duration = playbackState.durationFormat.toFloat(),
+//                recordRotation = recordRotation,
+//                onPlayOrPauseClick = onPlayOrPauseClick,
+//                onMusicListClick = onMusicListClick,
+//                modifier = Modifier.clickable {
+//                    toMusicPlayer()
+//                },
+//            )
+//        }
 
         SpaceExtraSmallHeight()
         MyNavigationBar(

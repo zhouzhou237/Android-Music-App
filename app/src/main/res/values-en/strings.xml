@@ -11,6 +11,9 @@
     <string name="me">Me</string>
     <string name="feed">Feed</string>
 
+
+    <string name="sheet">Play Sheet</string>
+    <string name="recommend_sheet">Recommend Sheet</string>
     <string name="wifi_preload">WiFi Preload</string>
     <string name="ad_click_tip">Tap to details for more</string>
     <string name="skip_ad_count">Skip in %1$ds</string>
@@ -462,6 +465,8 @@
     ]]> </Data>
     </string>
 
+    <string name="enter_phone">Please enter your mobile phone number</string>
+
     <string name="core_chat_message_notification_channel_name">Message Notifications</string>
 
     <string name="core_chat_message_notification_channel_description">Notifications for new chat messages</string>
@@ -536,6 +541,6 @@
     <string name="user_agreement">《User Agreement》</string>
     <string name="user_agreement_and">and</string>
     <string name="user_agreement_privacy_policy">《Privacy Policy》</string>
-
+    <string name="confirm_password">Confirm Password</string>
     <string name="current_version">Version</string>
 </resources>

@@ -7,6 +7,9 @@ import com.example.app.core.datastore.SessionPreferences
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +25,17 @@ class MyApplication:Application() {
         super.onCreate()
         instance = this
         Log.d(TAG,"MyApplication onCreate")
+
+        // Listen to user information and update it to the cache object.
+        applicationScope.launch {
+            userDataRepository.userData
+                .map { it.session }
+                .distinctUntilChanged()
+                .collectLatest {
+                    MyAppState.session = it.session
+                    MyAppState.userId = it.userId
+                }
+        }
     }
 
 
